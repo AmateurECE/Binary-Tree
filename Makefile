@@ -7,12 +7,12 @@
 #
 # CREATED:	    11/06/2017
 #
-# LAST EDITED:	    11/06/2017
+# LAST EDITED:	    11/07/2017
 ###
 
 TOP:=$(PWD)
 CC=gcc
-CFLAGS= -g -Wall -O0 -DCONFIG_DEBUG
+CFLAGS= -g -Wall -O0 -DCONFIG_DEBUG # TODO: Fix these flags
 
 SRCS += src/bitree.c
 
