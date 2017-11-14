@@ -8,7 +8,7 @@
  *
  * CREATED:	    11/06/2017
  *
- * LAST EDITED:	    11/06/2017
+ * LAST EDITED:	    11/14/2017
  ***/
 
 #ifndef __ET_BITREE_H_
@@ -55,8 +55,7 @@ extern bitree * bitree_create(void (*destroy)(void *), void * data);
 extern void bitree_destroy(bitree ** tree);
 extern int bitree_insl(bitree * parent, void * data);
 extern int bitree_insr(bitree * parent, void * data);
-extern void bitree_reml(bitree * node);
-extern void bitree_remr(bitree * node);
+extern void bitree_rem(bitree * node);
 
 /* These functions return the next node struct in a tree traversal, assuming
  * the algorithm specified (or NULL if there is no more). They can be used in

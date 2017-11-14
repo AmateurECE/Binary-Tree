@@ -11,7 +11,7 @@
  *
  * CREATED:	    11/06/2017
  *
- * LAST EDITED:	    11/10/2017
+ * LAST EDITED:	    11/14/2017
  ***/
 
 /*******************************************************************************
@@ -30,8 +30,11 @@
  * MACRO DEFINITIONS
  ***/
 
+#ifdef CONFIG_DEBUG
 #define FAIL	"\033[1;31m"
+#define PASS	"\033[1;39m"
 #define NC	"\033[0m"
+#endif
 
 /*******************************************************************************
  * STATIC FUNCTION PROTOTYPES
@@ -42,8 +45,7 @@ static int test_create();
 static int test_destroy();
 static int test_insl();
 static int test_insr();
-static int test_reml();
-static int test_remr();
+static int test_rem();
 static int test_merge();
 static int test_npreorder();
 static int test_npostorder();
@@ -57,12 +59,76 @@ static bitree * prep_tree();
  * API FUNCTIONS
  ***/
 
-bitree * bitree_create(void (*destroy)(void *), void * data) { return NULL; }
-void bitree_destroy(bitree ** tree) { return; }
+/*******************************************************************************
+ * FUNCTION:	    bitree_create
+ *
+ * DESCRIPTION:	    This function allocates and initializes a binary tree, and
+ *		    returns a pointer to it.
+ *
+ * ARGUMENTS:	    destroy: (void (*)(void *)) -- function to call when
+ *			removing an element (can be NULL).
+ *		    data: (void *) -- data to initialize root element with.
+ *
+ * RETURN:	    bitree * -- pointer to new struct, or NULL.
+ *
+ * NOTES:	    none.
+ ***/
+bitree * bitree_create(void (*destroy)(void *), void * data)
+{
+  if (data == NULL)
+    return NULL;
+  bitree * tree = malloc(sizeof(bitree));
+  if (tree == NULL)
+    return NULL;
+
+  *tree = (bitree){
+    .root = tree,
+    .parent = NULL,
+    .left = NULL,
+    .right = NULL,
+  
+    .size = malloc(sizeof(int)),
+    .destroy = destroy,
+    .data = data
+  };
+
+  if (tree->size == NULL) {
+    free(tree);
+    return NULL;
+  }
+
+  *(tree->size) = 1;
+  return tree;
+}
+
+/*******************************************************************************
+ * FUNCTION:	    bitree_destroy
+ *
+ * DESCRIPTION:	    Removes, if any, all elements from the tree, then frees all
+ *		    internal associated memory and sets `*tree' to point to NULL
+ *
+ * ARGUMENTS:	    tree: (bitree **) -- pointer to the tree pointer to free.
+ *
+ * RETURN:	    void.
+ *
+ * NOTES:	    none.
+ ***/
+void bitree_destroy(bitree ** tree)
+{
+  if (tree == NULL || *tree == NULL)
+    return;
+  
+  bitree_rem(*tree);
+
+  /* bitree_rem() frees the memory, so *tree now contains garbage. Let's
+   * make that a little more safe.
+   */
+  *tree = NULL;
+}
+
 int bitree_insl(bitree * parent, void * data) { return 1; }
 int bitree_insr(bitree * parent, void * data) { return 1; }
-void bitree_reml(bitree * node) { return; }
-void bitree_remr(bitree * node) { return; }
+void bitree_rem(bitree * node) { return; }
 int bitree_merge(bitree * tree1, bitree * tree2, void * data) { return 1; }
 bitree * bitree_npreorder(bitree * node) { return NULL; }
 bitree * bitree_npostorder(bitree * node) { return NULL; }
@@ -84,25 +150,23 @@ int main(int argc, char * argv[])
 	  "Test (bitree_destroy):\t\t%s\n"
 	  "Test (bitree_insl):\t\t%s\n"
 	  "Test (bitree_insr):\t\t%s\n"
-	  "Test (bitree_reml):\t\t%s\n"
-	  "Test (btiree_remr):\t\t%s\n"
+	  "Test (btiree_rem):\t\t%s\n"
 	  "Test (bitree_merge):\t\t%s\n"
 	  "Test (bitree_npreorder):\t%s\n"
 	  "Test (bitree_npostorder):\t%s\n"
 	  "Test (bitree_ninorder):\t\t%s\n"
 	  "Test (bitree_nlevelorder):\t%s\n",
 
-	  test_create()	    	? FAIL"Fail"NC : "Pass",
-	  test_destroy()	? FAIL"Fail"NC : "Pass",
-	  test_insl()		? FAIL"Fail"NC : "Pass",
-	  test_insr()		? FAIL"Fail"NC : "Pass",
-	  test_reml()		? FAIL"Fail"NC : "Pass",
-	  test_remr()		? FAIL"Fail"NC : "Pass",
-	  test_merge()		? FAIL"Fail"NC : "Pass",
-	  test_npreorder()	? FAIL"Fail"NC : "Pass",
-	  test_npostorder()	? FAIL"Fail"NC : "Pass",
-	  test_ninorder()	? FAIL"Fail"NC : "Pass",
-	  test_nlevelorder()	? FAIL"Fail"NC : "Pass");
+	  test_create()	    	? FAIL"Fail"NC : PASS"Pass"NC,
+	  test_destroy()	? FAIL"Fail"NC : PASS"Pass"NC,
+	  test_insl()		? FAIL"Fail"NC : PASS"Pass"NC,
+	  test_insr()		? FAIL"Fail"NC : PASS"Pass"NC,
+	  test_rem()		? FAIL"Fail"NC : PASS"Pass"NC,
+	  test_merge()		? FAIL"Fail"NC : PASS"Pass"NC,
+	  test_npreorder()	? FAIL"Fail"NC : PASS"Pass"NC,
+	  test_npostorder()	? FAIL"Fail"NC : PASS"Pass"NC,
+	  test_ninorder()	? FAIL"Fail"NC : PASS"Pass"NC,
+	  test_nlevelorder()	? FAIL"Fail"NC : PASS"Pass"NC);
 
 }
 #endif
@@ -243,17 +307,20 @@ static int test_insl()
     goto error_exit;
   if ((test = bitree_create(free, pTest)) == NULL)
     return 1;
-  pTest = NULL;
   *pTest = rand() % 20;
+
   /* NULL, data */
   if (!bitree_insl(NULL, pTest))
     goto error_exit;
+
   /* test, NULL */
   if (!bitree_insl(test, NULL))
     goto error_exit;
+
   /* Insertion into non-empty node */
   if (bitree_insl(test, pTest))
     goto error_exit;
+
   /* Insertion into full node */
   if (!bitree_insl(test, pTest))
     goto error_exit;
@@ -330,59 +397,9 @@ static int test_insr()
 }
 
 /*******************************************************************************
- * FUNCTION:	    test_reml
+ * FUNCTION:	    test_rem
  *
- * DESCRIPTION:	    Tests the bitree_reml() function.
- *
- * ARGUMENTS:	    none.
- *
- * RETURN:	    int -- 0 if the tests fail, 1 otherwise.
- *
- * NOTES:	    
- ***/
-static int test_reml()
-{
-  /* Test cases:
-   *	NULL
-   *	Remove an existing node
-   *	Tree is empty
-   *	Remove a non-existing node
-   */
-  bitree * test = NULL;
-  int * pTest = NULL;
-  /* NULL */
-  bitree_reml(NULL);
-  if ((pTest = malloc(sizeof(int))) == NULL)
-    goto error_exit;
-  *pTest = rand() % 20;
-  /* Remove an existing node */
-  if ((test = bitree_create(free, pTest)) == NULL)
-    goto error_exit;
-  if (bitree_insl(test, (void *)pTest))
-    goto error_exit;
-  bitree_reml(test);
-  if (test->left != NULL)
-    goto error_exit;
-  /* Tree is empty, non-existing node. */
-  if (!bitree_isempty(test))
-    goto error_exit;
-  bitree_reml(test);
-
-  return 0;
-
- error_exit: {
-    if (test != NULL)
-      bitree_destroy(&test);
-    if (pTest != NULL)
-      free(pTest);
-    return 1;
-  }
-}
-
-/*******************************************************************************
- * FUNCTION:	    test_remr
- *
- * DESCRIPTION:	    Tests the bitree_remr() function.
+ * DESCRIPTION:	    Tests the bitree_rem() function.
  *
  * ARGUMENTS:	    none.
  *
@@ -390,7 +407,7 @@ static int test_reml()
  *
  * NOTES:	    none.
  ***/
-static int test_remr()
+static int test_rem()
 {
   /* Test cases:
    *	NULL, data
@@ -404,7 +421,7 @@ static int test_remr()
   int * pTest = NULL;
 
   /* NULL */
-  bitree_remr(test);
+  bitree_rem(test);
 
   if ((pTest = malloc(sizeof(int))) == NULL)
     goto error_exit;
@@ -415,12 +432,12 @@ static int test_remr()
     goto error_exit;
   if (bitree_insl(test, (void *)pTest))
     goto error_exit;
-  bitree_remr(test);
+  bitree_rem(test);
   if (test->right != NULL)
     goto error_exit;
 
   /* Tree is empty, non-existing node. */
-  bitree_remr(test);
+  bitree_rem(test);
 
   return 0;
 
