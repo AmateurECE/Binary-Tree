@@ -53,7 +53,7 @@ To use the library:
 ...
 ```
 
-`gcc your.c -o yours -L/usr/bin/binary-tree`
+`gcc your.c /usr/bin/binary-tree/bitree.o -o yours`
 
 Ubuntu/KDE 16.04 and OS X 10.9 and greater are supported. Any other system is
 supported by Schr&#246;dinger's Principle.
