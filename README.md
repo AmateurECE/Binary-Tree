@@ -1,4 +1,4 @@
-# Binary Tree #
+## Binary Tree ##
 
 A <em>tree</em> is a hierarchical discrete structure which forms a subset of
 the class of discrete structures known as directed graphs. Specifically, it is
@@ -25,3 +25,11 @@ explained below:
 * `bitree_data` - Return the data pointer held in the node specified.
 * `bitree_left` - Return the left child of the node specified.
 * `bitree_right` - Return the right child of the node specified.
+
+## Compiling/Using ##
+
+This library is small enough that its source can be added to any other source
+repository with little consequence. It can, however, be compiled (NOT linked)
+and installed in the location where you store your precious binaries. Ubuntu/KDE
+16.04 and OS X 10.9 and greater are supported. Any other system is supported by
+Schr&#214;dinger's Principle.
