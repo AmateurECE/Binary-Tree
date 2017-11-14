@@ -126,8 +126,84 @@ void bitree_destroy(bitree ** tree)
   *tree = NULL;
 }
 
-int bitree_insl(bitree * parent, void * data) { return 1; }
-int bitree_insr(bitree * parent, void * data) { return 1; }
+/*******************************************************************************
+ * FUNCTION:	    bitree_insl
+ *
+ * DESCRIPTION:	    This function inserts a new node into the binary tree left
+ *		    of the node in `parent', with data `data'.
+ *
+ * ARGUMENTS:	    parent: (bitree *) -- the parent of the new node.
+ *		    data: (void *) -- the data to place in the new node.
+ *
+ * RETURN:	    int -- 0 on success, -1 on failure.
+ *
+ * NOTES:	    none.
+ ***/
+int bitree_insl(bitree * parent, void * data)
+{
+  /* Do not allow NULL inputs */
+  if (parent == NULL || data == NULL)
+    return -1;
+  /* Do not allow insertion if the node is already occupied */
+  if (parent->left != NULL)
+    return -1;
+
+  bitree * new = malloc(sizeof(bitree));
+  if (new == NULL)
+    return -1;
+  *new = (bitree){
+    .root = parent->root,
+    .parent = parent,
+    .left = NULL,
+    .right = NULL,
+    .size = parent->size,
+    .destroy = parent->destroy,
+    .data = data
+  };
+
+  parent->left = new;
+  *(parent->size) += 1;
+  return 0;
+}
+
+/*******************************************************************************
+ * FUNCTION:	    bitree_insr
+ *
+ * DESCRIPTION:	    This function inserts a new node to the right of `parent'
+ *		    with data `data'.
+ *
+ * ARGUMENTS:	    parent: (bitree *) -- the parent of the new node.
+ *		    data: (void *) -- data to populate the new node.
+ *
+ * RETURN:	    int -- 0 on success, -1 on failure.
+ *
+ * NOTES:	    none.
+ ***/
+int bitree_insr(bitree * parent, void * data)
+{
+  if (parent == NULL || data == NULL)
+    return -1;
+  if (parent->right != NULL)
+    return -1;
+
+  bitree * new = malloc(sizeof(bitree));
+  if (new == NULL)
+    return -1;
+  *new = (bitree){
+    .root = parent->root,
+    .parent = parent,
+    .left = NULL,
+    .right = NULL,
+    .size = parent->size,
+    .destroy = parent->destroy,
+    .data = data
+  };
+
+  parent->right = new;
+  *(parent->size) += 1;
+  return 0;
+}
+
 void bitree_rem(bitree * node) { return; }
 int bitree_merge(bitree * tree1, bitree * tree2, void * data) { return 1; }
 bitree * bitree_npreorder(bitree * node) { return NULL; }
@@ -320,6 +396,8 @@ static int test_insl()
   /* Insertion into non-empty node */
   if (bitree_insl(test, pTest))
     goto error_exit;
+  if (test->left == NULL)
+    goto error_exit;
 
   /* Insertion into full node */
   if (!bitree_insl(test, pTest))
@@ -377,6 +455,8 @@ static int test_insr()
   /* Insertion into non-empty node */
   if (bitree_insr(test, pTest))
     goto error_exit;
+  if (test->right == NULL)
+    goto error_exit;
 
   /* Insertion into full node */
   if (!bitree_insr(test, pTest))
@@ -432,13 +512,14 @@ static int test_rem()
     goto error_exit;
   if (bitree_insl(test, (void *)pTest))
     goto error_exit;
-  bitree_rem(test);
-  if (test->right != NULL)
+  bitree_rem(test->left);
+  if (test->left != NULL)
     goto error_exit;
 
   /* Tree is empty, non-existing node. */
+  bitree_rem(test->left);
   bitree_rem(test);
-
+  bitree_rem(test); /* Call again to be sure we don't segfault. */
   return 0;
 
  error_exit: {
