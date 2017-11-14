@@ -32,7 +32,28 @@ This library is small enough that its source can be added to any other source
 repository with little consequence. It can, however, be compiled (NOT linked)
 and installed in the location where you store your precious binaries:
 
-`make && mkdir /usr/bin/binary-tree && cp bitree.o /usr/bin/binary-tree`
+To compile & install the library:
+
+```
+git clone https://github.com/AmateurECE/Binary-Tree
+cd Binary-Tree/
+make
+mkdir /usr/bin/binary-tree
+cp bitree.o /usr/bin/binary-tree
+mkdir /usr/include/binary-tree
+cp bitree.h /usr/include /binary-tree
+```
+
+To use the library:
+
+(your.c):
+```
+...
+#include <binary-tree/bitree.h>
+...
+```
+
+`gcc your.c -o yours -L/usr/bin/binary-tree`
 
 Ubuntu/KDE 16.04 and OS X 10.9 and greater are supported. Any other system is
 supported by Schr&#246;dinger's Principle.
