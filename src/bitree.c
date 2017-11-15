@@ -31,10 +31,16 @@
  ***/
 
 #ifdef CONFIG_DEBUG
-#define FAIL	"\033[1;31m"
-#define PASS	"\033[1;39m"
+#   ifndef FAIL
+#   define FAIL	"\033[1;31m"
+#   endif
+
+#   ifndef PASS
+#   define PASS	"\033[1;39m"
+#   endif
+
 #define NC	"\033[0m"
-#endif
+#endif /* CONFIG_DEBUG */
 
 /*******************************************************************************
  * STATIC FUNCTION PROTOTYPES
@@ -81,6 +87,7 @@ bitree * bitree_create(void (*destroy)(void *), void * data)
   if (tree == NULL)
     return NULL;
 
+  /* TODO: Add height member */
   *tree = (bitree){
     .root = tree,
     .parent = NULL,
@@ -204,8 +211,41 @@ int bitree_insr(bitree * parent, void * data)
   return 0;
 }
 
+/*******************************************************************************
+ * FUNCTION:	    bitree_rem
+ *
+ * DESCRIPTION:	    This function removes, if any, all children of the node
+ *		    passed, and finally the node itself.
+ *
+ * ARGUMENTS:	    node: (bitree *) -- the node to remove.
+ *
+ * RETURN:	    void
+ *
+ * NOTES:	    O(n), n is the size of the subtree
+ ***/
 void bitree_rem(bitree * node)
-{ /* TODO: bitree_rem */ return; }
+{
+  if (node == NULL)
+    return;
+  /* TODO: Redesign bitree_rem() with tail-recursion & error reporting */
+  if (node->left != NULL)
+    bitree_rem(node->left);
+  if (node->right != NULL)
+    bitree_rem(node->right); /* So many branch instructions...sigh */
+
+  if (node->root == node) {
+    free(node->size);    
+  } else {
+    *(node->size) -= 1;
+    if (node->parent->left == node)
+      node->parent->left = NULL;
+    else
+      node->parent->right = NULL;
+  }
+
+  free(node);
+}
+
 int bitree_merge(bitree * tree1, bitree * tree2, void * data)
 { /* TODO: bitree_merge */ return 1; }
 bitree * bitree_npreorder(bitree * node)
@@ -525,7 +565,9 @@ static int test_rem()
   /* Tree is empty, non-existing node. */
   bitree_rem(test->left);
   bitree_rem(test);
-  bitree_rem(test); /* Call again to be sure we don't segfault. */
+  /* Calling bitree_rem() twice on a node will cause a segfault.
+   * TODO: Prevent segfault on double remove? */
+  /* bitree_rem(test); */
   return 0;
 
  error_exit: {
