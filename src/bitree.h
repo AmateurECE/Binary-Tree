@@ -48,6 +48,8 @@ typedef struct _Node_ {
  * API FUNCTION PROTOTYPES
  ***/
 
+/* TODO: Fix the documentation here. */
+
 extern bitree * bitree_create(void (*destroy)(void *), void * data);
 /* Even if the node that is passed is not the root node, the whole tree is
  * destroyed

@@ -204,12 +204,18 @@ int bitree_insr(bitree * parent, void * data)
   return 0;
 }
 
-void bitree_rem(bitree * node) { return; }
-int bitree_merge(bitree * tree1, bitree * tree2, void * data) { return 1; }
-bitree * bitree_npreorder(bitree * node) { return NULL; }
-bitree * bitree_npostorder(bitree * node) { return NULL; }
-bitree * bitree_ninorder(bitree * node) { return NULL; }
-bitree * bitree_nlevelorder(bitree * node) { return NULL; }
+void bitree_rem(bitree * node)
+{ /* TODO: bitree_rem */ return; }
+int bitree_merge(bitree * tree1, bitree * tree2, void * data)
+{ /* TODO: bitree_merge */ return 1; }
+bitree * bitree_npreorder(bitree * node)
+{ /* TODO: bitree_npreorder */ return NULL; }
+bitree * bitree_npostorder(bitree * node)
+{ /* TODO: bitree_npostorder */ return NULL; }
+bitree * bitree_ninorder(bitree * node)
+{ /* TODO: bitree_ninorder */ return NULL; }
+bitree * bitree_nlevelorder(bitree * node)
+{ /* TODO: bitree_nlevelorder */ return NULL; }
 
 /*******************************************************************************
  * MAIN
