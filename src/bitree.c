@@ -61,6 +61,7 @@ static int test_npreorder();
 static int test_npostorder();
 static int test_ninorder();
 static int test_nlevelorder();
+static void print_tree(bitree * bitree, size_t null);
 
 static bitree * prep_tree();
 #endif
@@ -900,6 +901,35 @@ static int test_nlevelorder()
 
   bitree_destroy(&test);
   return 0;
+}
+
+/*******************************************************************************
+ * FUNCTION:	    print_tree
+ *
+ * DESCRIPTION:	    Prints a tree to STDOUT.
+ *
+ * ARGUMENTS:	    bitree: (bitree *) -- pointer to the tree to print.
+ *		    null: (size_t) -- internal value. User should always pass
+ *			0.
+ *
+ * RETURN:	    void.
+ *
+ * NOTES:	    none.
+ ***/
+static void print_tree(bitree * bitree, size_t null)
+{
+  if (bitree == NULL)
+    return;
+  printf("--->\n");
+  if (null != 0)
+    for (size_t i = 0; i < null; i++)
+      printf("\t");
+  printf("%s %p ",
+	 bitree->parent == NULL ? "|" :
+	 bitree->parent->left == bitree ? "L" : "R",
+	 bitree);
+  print_tree(bitree->left, ++null);
+  print_tree(bitree->right, null);
 }
 
 /*******************************************************************************
