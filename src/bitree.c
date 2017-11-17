@@ -1,3 +1,4 @@
+
 /*******************************************************************************
  * NAME:	    bitree.c
  *
@@ -11,7 +12,7 @@
  *
  * CREATED:	    11/06/2017
  *
- * LAST EDITED:	    11/14/2017
+ * LAST EDITED:	    11/16/2017
  ***/
 
 /*******************************************************************************
@@ -31,15 +32,18 @@
  ***/
 
 #ifdef CONFIG_DEBUG
-#   ifndef FAIL
-#   define FAIL	"\033[1;31m"
+#   define FAIL "\033[1;31m"
+
+/* This is specific to my terminal, I think. But since it only affects the
+ * colors of the test output, it doesn't really matter
+ */
+#   ifdef __APPLE__
+#	define PASS "\033[1;32m"
+#   else
+#	define PASS "\033[1;39m"
 #   endif
 
-#   ifndef PASS
-#   define PASS	"\033[1;39m"
-#   endif
-
-#define NC	"\033[0m"
+#   define NC	    "\033[0m"
 #endif /* CONFIG_DEBUG */
 
 /*******************************************************************************
