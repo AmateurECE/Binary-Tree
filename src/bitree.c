@@ -51,19 +51,19 @@
  ***/
 
 #ifdef CONFIG_DEBUG
-static int test_create();
-static int test_destroy();
-static int test_insl();
-static int test_insr();
-static int test_rem();
-static int test_merge();
-static int test_npreorder();
-static int test_npostorder();
-static int test_ninorder();
-static int test_nlevelorder();
+static int test_create(void);
+static int test_destroy(void);
+static int test_insl(void);
+static int test_insr(void);
+static int test_rem(void);
+static int test_merge(void);
+static int test_npreorder(void);
+static int test_npostorder(void);
+static int test_ninorder(void);
+static int test_nlevelorder(void);
 static void print_tree(bitree * bitree, size_t null);
 
-static bitree * prep_tree();
+static bitree * prep_tree(void);
 #endif
 
 /*******************************************************************************
