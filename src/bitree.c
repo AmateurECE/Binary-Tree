@@ -61,7 +61,7 @@ static int test_npreorder(void);
 static int test_npostorder(void);
 static int test_ninorder(void);
 static int test_nlevelorder(void);
-static void print_tree(bitree * bitree, size_t null);
+void print_tree(bitree * bitree, size_t null);
 
 static bitree * prep_tree(void);
 #endif
@@ -251,8 +251,73 @@ void bitree_rem(bitree * node)
   free(node);
 }
 
+/*******************************************************************************
+ * FUNCTION:	    bitree_merge
+ *
+ * DESCRIPTION:	    Merges two bitrees, without splicing them into each other.
+ *		    This implementation is unordered, so we make no attempt
+ *		    to balance the tree when merging.
+ *
+ * ARGUMENTS:	    tree1: (bitree *) -- the host tree
+ *		    tree2: (bitree *) -- the tree to splice in
+ *		    data: (void *) -- this param is used only when a new node
+ *			needs to be created in order to merge the trees.
+ *
+ * RETURN:	    int -- 0 on success, -1 otherwise.
+ *
+ * NOTES:	    See the documentation in bitree.h for a full explanation
+ *		    of this functions behaviour.
+ ***/
 int bitree_merge(bitree * tree1, bitree * tree2, void * data)
-{ /* TODO: bitree_merge */ return 1; }
+{
+  /* Test for bad inputs */
+  if (tree1 == NULL
+      || tree2 == NULL
+      || tree2->root != tree2
+      || tree1->root == tree2->root
+      || tree1->destroy != tree2->destroy)
+    return -1;
+
+  /* Test for case 1 */
+  if (tree1->root == tree1
+      && tree1->left != NULL
+      && tree1->right != NULL
+      && data) {
+
+    bitree * newroot = bitree_create(tree1->destroy, data);
+    if (newroot == NULL)
+      return -1;
+    *(newroot->size) += *(tree1->size) + *(tree2->size);
+
+    newroot->left = tree1;
+    tree1->parent = newroot;
+    tree1->root = newroot; /* TODO: Recursively update .size & .root */
+    tree1->size = newroot->size;
+
+    newroot->right = tree2;
+    tree2->parent = newroot;
+    tree2->root = newroot;
+    tree2->size = newroot->size;
+  }
+  /* Test for case 2 & case 3 */
+  else if (tree1->left == NULL || tree1->right == NULL) {
+
+    if (tree1->left == NULL)
+      tree1->left = tree2;
+    else
+      tree1->right = tree2;
+
+    tree2->parent = tree1;
+    tree2->root = tree1->root; /* Also update .size & .root here */
+    *(tree1->root->size) += *(tree2->size);
+
+  } else {
+    return -1;
+  }
+
+  return 0;
+}
+
 bitree * bitree_npreorder(bitree * node)
 { /* TODO: bitree_npreorder */ return NULL; }
 bitree * bitree_npostorder(bitree * node)
@@ -607,10 +672,14 @@ static int test_merge()
    *	!isroot(tree1) && !isfull(tree1) && isroot(tree2) && !data  -> 0
    *	!isroot(tree1) && !isfull(tree1) && !isroot(tree2)	    -> -1
    *	!isroot(tree1) && isfull(tree1)				    -> -1
+   * Case 3:
+   *	isroot(tree1) && !isfull(tree1) && isroot(tree2) && data    -> 0
+   *	isroot(tree1) && !isfull(tree1) && isroot(tree2) && !data   -> 0
    * NULL, tree2, (data | NULL)					    -> -1
    * tree1, NULL, (data | NULL)					    -> -1
    * tree1 and tree2 are on the same tree.			    -> -1
    */
+
   bitree * test1 = prep_tree();
   bitree * test2 = prep_tree();
   int * pTest = malloc(sizeof(int));
@@ -624,7 +693,6 @@ static int test_merge()
 
   /* Reset trees */
   bitree_destroy(&test1);
-  bitree_destroy(&test2);
   pTest = malloc(sizeof(int));
   *pTest = 1;
   test1 = prep_tree(), test2 = prep_tree();
@@ -646,7 +714,6 @@ static int test_merge()
 
   /* Reset trees */
   bitree_destroy(&test1);
-  bitree_destroy(&test2);
   pTest = malloc(sizeof(int));
   *pTest = 1;
   test1 = prep_tree(), test2 = prep_tree();
@@ -659,7 +726,6 @@ static int test_merge()
 
   /* Reset trees */
   bitree_destroy(&test1);
-  bitree_destroy(&test2);
   pTest = malloc(sizeof(int));
   *pTest = 1;
   test1 = prep_tree(), test2 = prep_tree();
@@ -686,8 +752,30 @@ static int test_merge()
   if (!bitree_merge(test1, test1->left, pTest))
     return 1;
 
+  /* Case 3: */
+  /* isroot(tree1) && !isfull(tree1) && isroot(tree2) && data    -> 0 */
+  bitree_rem(test1->right);
+  if (test1->right != NULL)
+    return 1;
+  if (bitree_merge(test1, test2, pTest))
+    return 1;
+
+  /* Reset trees */
   bitree_destroy(&test1);
-  bitree_destroy(&test2);
+  pTest = malloc(sizeof(int));
+  *pTest = 1;
+  test1 = prep_tree(), test2 = prep_tree();
+  if (test1 == NULL || test2 == NULL)
+    return 1;
+
+  bitree_rem(test1->left);
+  if (test1->left != NULL)
+    return 1;
+  if (bitree_merge(test1, test2, NULL))
+    return 1;
+  /* isroot(tree1) && !isfull(tree1) && isroot(tree2) && !data   -> 0 */
+
+  bitree_destroy(&test1);
   return 0;
 }
 
@@ -916,7 +1004,7 @@ static int test_nlevelorder()
  *
  * NOTES:	    none.
  ***/
-static void print_tree(bitree * bitree, size_t null)
+void print_tree(bitree * bitree, size_t null)
 {
   if (bitree == NULL)
     return;

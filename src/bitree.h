@@ -8,7 +8,7 @@
  *
  * CREATED:	    11/06/2017
  *
- * LAST EDITED:	    11/14/2017
+ * LAST EDITED:	    11/16/2017
  ***/
 
 #ifndef __ET_BITREE_H_
@@ -70,12 +70,28 @@ extern bitree * bitree_ninorder(bitree * node);
 extern bitree * bitree_nlevelorder(bitree * node);
 
 /**
- * Merges tree2 into the node specified at tree1. If tree1 is the root, and has
- * two children nodes, a new node is created which becomes the new root of the
- * tree, with its children being the root of tree1 and tree2, and has data data.
- * Otherwise, if tree1 has only one child node, the root of tree2 is inserted
- * to the free child spot. In the latter case, the value of data is not used.
- * If tree2 is not a root node, an error is returned.
+ * This merging function is greedy, and uses any means possible to merge the two
+ * trees it is passed. There is generally two cases which affect the behaviour
+ * of this function:
+ *
+ * Case 1: The node at `tree1' is the root of its tree, `tree1' already has two
+ *	children, and `tree2' is the root of its tree.
+ *	    In this case, a new node is generated, which contains data `data',
+ *	and its children are `tree1' and `tree2', left to right, respectively.
+ * Case 2: The node at `tree1' is the root of its tree, and it has at least one
+ *	unoccupied child, and the node at `tree2' is the root of its tree.
+ *	    In this case, `tree2' is applied to one of the free children of
+ *	`tree1', with the left child being given precedence.
+ * Case 3: The node at `tree1' is not the root of its tree, it has at least one
+ *	unoccupied child position, and the node at `tree2' is the root of its
+ *	tree.
+ *	    In this case, `tree2' is applied to `tree1', with the left child
+ *	of `tree1' given precedence.
+ *
+ * Any cases which do not exactly fit into these criteria will result in the
+ * failure of the function. The two trees cannot be on the same tree. In
+ * addition, if tree1->destroy does not point to the same function as
+ * tree2->destroy, or if both are not NULL, the function will return an error.
  */
 extern int bitree_merge(bitree * tree1, bitree * tree2, void * data);
 
