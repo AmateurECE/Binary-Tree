@@ -1,4 +1,5 @@
-./src/bitree.c: bitree_npreorder */ return NULL; } | id:17439e907ea3aa0c3035f1c223d65a4c04bfbd9d
+./src/bitree.c: Add time complexity. Add space complexity? | id:0a203c990a12efd869e347edeb523a4da63c613d
+./src/bitree.c: make print_tree static */ | id:2670479c137cb7bfcc1d9ee503b800b9c0582f46
 ./src/bitree.c: Redesign bitree_rem() with tail-recursion & error reporting */ | id:27c57b13c49ef947de7bd88ff7e213030c1a7ecd
 ./src/bitree.c: bitree_npostorder */ return NULL; } | id:4fd9a87d83c3f059b788b0fba30dbb4088c11b30
 ./src/bitree.c: Prevent segfault on double remove? */ | id:58086443e5009123feb178bedfe3242c6e816944

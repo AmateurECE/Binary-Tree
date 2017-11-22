@@ -1,4 +1,3 @@
-
 /*******************************************************************************
  * NAME:	    bitree.c
  *
@@ -12,7 +11,7 @@
  *
  * CREATED:	    11/06/2017
  *
- * LAST EDITED:	    11/16/2017
+ * LAST EDITED:	    11/22/2017
  ***/
 
 /*******************************************************************************
@@ -20,9 +19,9 @@
  ***/
 
 #ifdef CONFIG_DEBUG
-#include <stdio.h>
-#include <stdlib.h>
-#include <time.h>
+#   include <stdio.h>
+#   include <stdlib.h>
+#   include <time.h>
 #endif
 
 #include "bitree.h"
@@ -61,10 +60,17 @@ static int test_npreorder(void);
 static int test_npostorder(void);
 static int test_ninorder(void);
 static int test_nlevelorder(void);
+/* TODO: make print_tree static */
 void print_tree(bitree * bitree, size_t null);
 
 static bitree * prep_tree(void);
 #endif
+
+/* Helper functions used by the 'traverse-type' functions. */
+static bitree * npreorder_helper(bitree * node, bitree * original);
+static bitree * npostorder_helper(bitree * node, bitree * original);
+static bitree * ninorder_helper(bitree * node, bitree * original);
+static bitree * nlevelorder_helper(bitree * node, bitree * original);
 
 /*******************************************************************************
  * API FUNCTIONS
@@ -318,12 +324,92 @@ int bitree_merge(bitree * tree1, bitree * tree2, void * data)
   return 0;
 }
 
+/*******************************************************************************
+ * FUNCTION:	    bitree_npreorder
+ *
+ * DESCRIPTION:	    This function returns the next node that would be operated
+ *		    on if the tree were being traversed with a preorder
+ *		    algorithm. See the documentation for an example of how this
+ *		    function could be used.
+ *
+ * ARGUMENTS:	    node: (bitree *) -- the current node.
+ *
+ * RETURN:	    bitree * -- pointer to the next node, or NULL if there was
+ *		    a problem.
+ *
+ * NOTES:	    THIS IS NOT A TRAVERSAL FUNCTION. It does not 'traverse' the
+ *		    tree in a traditional sense. See the documentation in the
+ *		    header file.
+ ***/
 bitree * bitree_npreorder(bitree * node)
-{ /* TODO: bitree_npreorder */ return NULL; }
+{
+  if (node == NULL || *(node->size) == 1)
+    return node;
+
+  if (node->left != NULL)
+    return node->left;
+  if (node->right != NULL)
+    return node->right;
+  return npreorder_helper(node->parent, node);
+}
+
+/*******************************************************************************
+ * FUNCTION:	    bitree_npostorder
+ *
+ * DESCRIPTION:	    This function returns the next node that would be operated
+ *		    on if the tree were being traversed with a postorder
+ *		    algorithm. See the documentation for an example of how this
+ *		    function could be used.
+ *
+ * ARGUMENTS:	    node: (bitree *) -- the current node.
+ *
+ * RETURN:	    bitree * -- pointer to the next node, or NULL if there was
+ *		    a problem.
+ *
+ * NOTES:	    THIS IS NOT A TRAVERSAL FUNCTION. It does not 'traverse' the
+ *		    tree in a traditional sense. See the documentation in the
+ *		    header file.
+ ***/
 bitree * bitree_npostorder(bitree * node)
 { /* TODO: bitree_npostorder */ return NULL; }
+
+/*******************************************************************************
+ * FUNCTION:	    bitree_ninorder
+ *
+ * DESCRIPTION:	    This function returns the next node that would be operated
+ *		    on if the tree were being traversed with a inorder
+ *		    algorithm. See the documentation for an example of how this
+ *		    function could be used.
+ *
+ * ARGUMENTS:	    node: (bitree *) -- the current node.
+ *
+ * RETURN:	    bitree * -- pointer to the next node, or NULL if there was
+ *		    a problem.
+ *
+ * NOTES:	    THIS IS NOT A TRAVERSAL FUNCTION. It does not 'traverse' the
+ *		    tree in a traditional sense. See the documentation in the
+ *		    header file.
+ ***/
 bitree * bitree_ninorder(bitree * node)
 { /* TODO: bitree_ninorder */ return NULL; }
+
+/*******************************************************************************
+ * FUNCTION:	    bitree_nlevelorder
+ *
+ * DESCRIPTION:	    This function returns the next node that would be operated
+ *		    on if the tree were being traversed with a levelorder
+ *		    algorithm. See the documentation for an example of how this
+ *		    function could be used.
+ *
+ * ARGUMENTS:	    node: (bitree *) -- the current node.
+ *
+ * RETURN:	    bitree * -- pointer to the next node, or NULL if there was
+ *		    a problem.
+ *
+ * NOTES:	    THIS IS NOT A TRAVERSAL FUNCTION. It does not 'traverse' the
+ *		    tree in a traditional sense. See the documentation in the
+ *		    header file.
+ ***/
 bitree * bitree_nlevelorder(bitree * node)
 { /* TODO: bitree_nlevelorder */ return NULL; }
 
@@ -360,12 +446,50 @@ int main(int argc, char * argv[])
 	  test_ninorder()	? FAIL"Fail"NC : PASS"Pass"NC,
 	  test_nlevelorder()	? FAIL"Fail"NC : PASS"Pass"NC);
 
+  return 0; /* Not required by spec, but it is by GCC 7. */
 }
 #endif
 
 /*******************************************************************************
  * STATIC FUNCTIONS
  ***/
+
+/*******************************************************************************
+ * FUNCTION:	    npreorder_helper
+ *
+ * DESCRIPTION:	    This is a helper function for bitree_npreorder(). If the
+ *		    next node in traversal is not immediately accesible from the
+ *		    current node, this function will find it.
+ *
+ * ARGUMENTS:	    node: (bitree *) -- on the first call, this pointer usually
+ *			contains the value of original->parent.
+ *		    original: (bitree *) -- pointer to the first node passed.
+ *
+ * RETURN:	    bitree * -- pointer to the next node in preorder traversal.
+ *
+ * NOTES:	    TODO: Add time complexity. Add space complexity?
+ ***/
+static bitree * npreorder_helper(bitree * node, bitree * original)
+{
+  /* Assumptions (given from bitree_npreorder):
+   * original is not NULL
+   * there is more than one node in the tree.
+   * original->left is NULL
+   * original->right is NULL
+   */
+  if (node == NULL)
+    return original;
+  if (node->left == original && node->right == NULL)
+    return npreorder_helper(node->parent, node);
+  else if (node->left == original && node->right != NULL)
+    return node->right;
+
+  return npreorder_helper(node->parent, node);;
+}
+
+static bitree * npostorder_helper(bitree * node, bitree * original);
+static bitree * ninorder_helper(bitree * node, bitree * original);
+static bitree * nlevelorder_helper(bitree * node, bitree * original);
 
 /*******************************************************************************
  * FUNCTION:	    test_create
@@ -829,7 +953,7 @@ static int test_npreorder()
     return 1;
 
   bitree_destroy(&test);
-  return 1;
+  return 0;
 }
 
 /*******************************************************************************
