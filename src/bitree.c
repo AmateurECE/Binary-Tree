@@ -59,7 +59,6 @@ static int test_merge(void);
 static int test_npreorder(void);
 static int test_npostorder(void);
 static int test_ninorder(void);
-static int test_nlevelorder(void);
 /* TODO: make print_tree static */
 void print_tree(bitree * bitree, size_t null);
 
@@ -70,7 +69,6 @@ static bitree * prep_tree(void);
 static bitree * npreorder_helper(bitree * node, bitree * original);
 static bitree * npostorder_helper(bitree * node, bitree * original);
 static bitree * ninorder_helper(bitree * node, bitree * original);
-static bitree * nlevelorder_helper(bitree * node, bitree * original);
 
 /*******************************************************************************
  * API FUNCTIONS
@@ -410,26 +408,6 @@ bitree * bitree_ninorder(bitree * node)
 }
 
 /*******************************************************************************
- * FUNCTION:	    bitree_nlevelorder
- *
- * DESCRIPTION:	    This function returns the next node that would be operated
- *		    on if the tree were being traversed with a levelorder
- *		    algorithm. See the documentation for an example of how this
- *		    function could be used.
- *
- * ARGUMENTS:	    node: (bitree *) -- the current node.
- *
- * RETURN:	    bitree * -- pointer to the next node, or NULL if there was
- *		    a problem.
- *
- * NOTES:	    THIS IS NOT A TRAVERSAL FUNCTION. It does not 'traverse' the
- *		    tree in a traditional sense. See the documentation in the
- *		    header file.
- ***/
-bitree * bitree_nlevelorder(bitree * node)
-{ /* TODO: bitree_nlevelorder */ return NULL; }
-
-/*******************************************************************************
  * MAIN
  ***/
 
@@ -448,8 +426,7 @@ int main(int argc, char * argv[])
 	  "Test (bitree_merge):\t\t%s\n"
 	  "Test (bitree_npreorder):\t%s\n"
 	  "Test (bitree_npostorder):\t%s\n"
-	  "Test (bitree_ninorder):\t\t%s\n"
-	  "Test (bitree_nlevelorder):\t%s\n",
+	  "Test (bitree_ninorder):\t\t%s\n",
 
 	  test_create()	    	? FAIL"Fail"NC : PASS"Pass"NC,
 	  test_destroy()	? FAIL"Fail"NC : PASS"Pass"NC,
@@ -459,8 +436,7 @@ int main(int argc, char * argv[])
 	  test_merge()		? FAIL"Fail"NC : PASS"Pass"NC,
 	  test_npreorder()	? FAIL"Fail"NC : PASS"Pass"NC,
 	  test_npostorder()	? FAIL"Fail"NC : PASS"Pass"NC,
-	  test_ninorder()	? FAIL"Fail"NC : PASS"Pass"NC,
-	  test_nlevelorder()	? FAIL"Fail"NC : PASS"Pass"NC);
+	  test_ninorder()	? FAIL"Fail"NC : PASS"Pass"NC);
 
   return 0; /* Not required by spec, but it is by GCC 7. */
 }
@@ -585,8 +561,6 @@ static bitree * ninorder_helper(bitree * node, bitree * original)
 
   return NULL;
 }
-
-static bitree * nlevelorder_helper(bitree * node, bitree * original);
 
 /*******************************************************************************
  * FUNCTION:	    test_create
@@ -1152,59 +1126,6 @@ static int test_ninorder()
 
   /* Next node does not exist */
   if (bitree_ninorder(test->right) != test)
-    return 1;
-
-  bitree_destroy(&test);
-  return 0;
-}
-
-/*******************************************************************************
- * FUNCTION:	    test_nlevelorder
- *
- * DESCRIPTION:	    Test the bitree_nlevelorder() function.
- *
- * ARGUMENTS:	    none.
- *
- * RETURN:	    int -- 0 if the test passes, 1 otherwise.
- *
- * NOTES:	    none.
- ***/
-static int test_nlevelorder()
-{
-  /* Test cases:
-   *	NULL
-   *	Tree is empty
-   *	Next node exists
-   *	Next node does not exist
-   */
-
-  /* NULL */
-  if(bitree_nlevelorder(NULL))
-    return 1;
-
-  int * pTest = malloc(sizeof(int));
-  if (pTest == NULL)
-    return 1;
-  *pTest = 1;
-  bitree * test = bitree_create(free, pTest);
-  if (test == NULL)
-    return 1;
-
-  /* Tree is empty */
-  if (bitree_nlevelorder(test) != test)
-    return 1;
-
-  bitree_destroy(&test);
-  test = prep_tree();
-  if (test == NULL)
-    return 1;
-
-  /* Next node exists */
-  if (bitree_nlevelorder(test) != test->left)
-    return 1;
-
-  /* Next node does not exist */
-  if (bitree_nlevelorder(test->left->right) != test)
     return 1;
 
   bitree_destroy(&test);
