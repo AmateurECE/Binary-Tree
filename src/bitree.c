@@ -11,7 +11,7 @@
  *
  * CREATED:	    11/06/2017
  *
- * LAST EDITED:	    11/22/2017
+ * LAST EDITED:	    11/25/2017
  ***/
 
 /*******************************************************************************
@@ -369,9 +369,17 @@ bitree * bitree_npreorder(bitree * node)
  * NOTES:	    THIS IS NOT A TRAVERSAL FUNCTION. It does not 'traverse' the
  *		    tree in a traditional sense. See the documentation in the
  *		    header file.
+ *		    Post-Order traversals begin at the leftmost node. The user
+ *		    should keep this in mind when using this function.
  ***/
 bitree * bitree_npostorder(bitree * node)
-{ /* TODO: bitree_npostorder */ return NULL; }
+{
+  if (node == NULL || *(node->size) == 1)
+    return node;
+  if (node == node->root)
+    return npostorder_helper(node->left, node);
+  return npostorder_helper(node->parent, node);
+}
 
 /*******************************************************************************
  * FUNCTION:	    bitree_ninorder
@@ -391,7 +399,15 @@ bitree * bitree_npostorder(bitree * node)
  *		    header file.
  ***/
 bitree * bitree_ninorder(bitree * node)
-{ /* TODO: bitree_ninorder */ return NULL; }
+{
+  if (node == NULL || *(node->size) == 1)
+    return node;
+  if (node->root == node)
+    return ninorder_helper(node->left, node);
+  else if (node->right != NULL)
+    return ninorder_helper(node->right, node);
+  return ninorder_helper(node->parent, node);
+}
 
 /*******************************************************************************
  * FUNCTION:	    bitree_nlevelorder
@@ -487,8 +503,89 @@ static bitree * npreorder_helper(bitree * node, bitree * original)
   return npreorder_helper(node->parent, node);;
 }
 
-static bitree * npostorder_helper(bitree * node, bitree * original);
-static bitree * ninorder_helper(bitree * node, bitree * original);
+/*******************************************************************************
+ * FUNCTION:	    npostorder_helper
+ *
+ * DESCRIPTION:	    This is a helper function for bitree_npostorder(). If the
+ *		    next node in traversal is not immediately accesible from the
+ *		    current node, this function will find it.
+ *
+ * ARGUMENTS:	    node: (bitree *) -- on the first call, this pointer usually
+ *			contains the value of original->parent.
+ *		    original: (bitree *) -- pointer to the first node passed.
+ *
+ * RETURN:	    bitree * -- pointer to the next node in postorder traversal.
+ *
+ * NOTES:	    TODO: Add time complexity. Add space complexity?
+ ***/
+static bitree * npostorder_helper(bitree * node, bitree * original)
+{
+  if (node == NULL)
+    return original;
+
+  /* We're recursing downwards */
+  if (node->parent == original) {
+    if (bitree_isleaf(node))
+      return node;
+    if (node->left != NULL)
+      return npostorder_helper(node->left, node);
+    if (node->right != NULL)
+      return npostorder_helper(node->right, node);
+  }
+  /* We're recursing upwards */
+  else if (original->parent == node) {
+    if (node->right == original)
+      return node;
+    else if (node->right != NULL)
+      return npostorder_helper(node->right, node);
+  }
+
+  return NULL;
+}
+
+/*******************************************************************************
+ * FUNCTION:	    ninorder_helper
+ *
+ * DESCRIPTION:	    This is a helper function for bitree_ninorder(). If the
+ *		    next node in traversal is not immediately accesible from the
+ *		    current node, this function will find it.
+ *
+ * ARGUMENTS:	    node: (bitree *) -- on the first call, this pointer usually
+ *			contains the value of original->parent.
+ *		    original: (bitree *) -- pointer to the first node passed.
+ *
+ * RETURN:	    bitree * -- pointer to the next node in inorder traversal.
+ *
+ * NOTES:	    TODO: Add time complexity. Add space complexity?
+ ***/
+static bitree * ninorder_helper(bitree * node, bitree * original)
+{
+  if (node == NULL)
+    return original;
+
+  /* Recursing down the left tree */
+  if (original->left == node) {
+    if (node->left == NULL)
+      return node;
+    return ninorder_helper(node->left, node);
+  }
+  /* Recursing down the right tree */
+  else if (original->right == node) {
+    if (node->left != NULL)
+      return ninorder_helper(node->left, node);
+    return node;
+  }
+  /* Recursing upwards */
+  else if (original->parent == node) {
+    if (node->left == original)
+      return node;
+    if (node->right == original)
+      return ninorder_helper(node->parent, node);
+  }
+
+  return NULL;
+}
+
 static bitree * nlevelorder_helper(bitree * node, bitree * original);
 
 /*******************************************************************************
@@ -973,7 +1070,6 @@ static int test_npostorder()
    *	NULL
    *	Tree is empty
    *	Next node exists
-   *	Next node does not exist
    */
 
   /* NULL */
@@ -1002,7 +1098,7 @@ static int test_npostorder()
     return 1;
 
   /* Next node does not exist */
-  if (bitree_npostorder(test) != test)
+  if (bitree_npostorder(test) != test->left->left)
     return 1;
 
   bitree_destroy(&test);
