@@ -13,15 +13,17 @@
 TOP:=$(PWD)
 CC=gcc
 CFLAGS= -g -Wall -O0 -DCONFIG_DEBUG -I$(TOP)/include/
+
 SRCS += src/bitree.c
+SRCS += src/test.c
 
 OBJS=$(patsubst %.c,%.o,$(SRCS))
 
-.PHONY: force clean
+.PHONY: force test clean
 
-all: force bitree clean
+all: force test clean
 
-bitree: force $(OBJS)
+test: force $(OBJS)
 	$(CC) $(CFLAGS) -o bitree $(OBJS)
 	@if [ `uname` = Darwin ]; then \
 		dsymutil bitree; \
@@ -30,9 +32,7 @@ bitree: force $(OBJS)
 $(OBJS): force
 
 clean:
-	rm -f $(TOP)/src/*.o
-	rm -f $(TOP)/src/*.c~
-	rm -f $(TOP)/src/*.h~
+	rm -f $(TOP)/src/test.o
 
 force:
 
