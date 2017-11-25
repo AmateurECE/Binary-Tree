@@ -1,11 +1,8 @@
 ./src/bitree.c: Add time complexity. Add space complexity? | id:0a203c990a12efd869e347edeb523a4da63c613d
-./src/bitree.c: make print_tree static */ | id:2670479c137cb7bfcc1d9ee503b800b9c0582f46
-./src/bitree.c: Redesign bitree_rem() with tail-recursion & error reporting */ | id:27c57b13c49ef947de7bd88ff7e213030c1a7ecd
-./src/bitree.c: bitree_npostorder */ return NULL; } | id:4fd9a87d83c3f059b788b0fba30dbb4088c11b30
-./src/bitree.c: Prevent segfault on double remove? */ | id:58086443e5009123feb178bedfe3242c6e816944
-./src/bitree.c: bitree_nlevelorder */ return NULL; } | id:af131e6e6865eb7e2d58de7a33d4bce6831b8870
+./src/test.c: Prevent segfault on double remove? */ | id:276430eee782d8f8d2dfe738a58c3cc851b992b1
+./src/test.c: make print_tree static */ | id:3a1e3680aea93c27bc06911030a00a6898c20de9
+./include/bitree.h: Fix the documentation here. */ | id:8f2a13802e0ade36249e9240d5ff38829285321c
 ./src/bitree.c: Add height member */ | id:c0f2942665c61733a8ff07b685a3dbfa32e1f322
-./src/bitree.c: bitree_ninorder */ return NULL; } | id:c2e6451516aad5635ff523e6b8b2b7e887cb4ebc
+./src/bitree.c: Redesign bitree_rem with tail-recursion & error reporting */ | id:f1c79dce16193fc2388483c7554c8809dc7df1a4
 ./src/bitree.c: Recursively update .size & .root */ | id:fa9344316aaf8eab46ed63799a0218d0f2254fda
 ./README.md: insert the tree picture here. --> | id:ff0704194a8b467dfb943643667280e20ea584ff
-./src/bitree.h: Fix the documentation here. */ | id:ffcac592eeaf76538e2aa5b062b201f3eb4e425e

@@ -198,7 +198,7 @@ void bitree_rem(bitree * node)
 {
   if (node == NULL)
     return;
-  /* TODO: Redesign bitree_rem() with tail-recursion & error reporting */
+  /* TODO: Redesign bitree_rem with tail-recursion & error reporting */
   if (node->left != NULL)
     bitree_rem(node->left);
   if (node->right != NULL)
