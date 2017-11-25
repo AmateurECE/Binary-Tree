@@ -7,12 +7,12 @@
 #
 # CREATED:	    11/06/2017
 #
-# LAST EDITED:	    11/16/2017
+# LAST EDITED:	    11/25/2017
 ###
 
 TOP:=$(PWD)
 CC=gcc
-CFLAGS= -g -Wall -O0 -DCONFIG_DEBUG
+CFLAGS= -g -Wall -O0 -DCONFIG_DEBUG -I$(TOP)/include/
 SRCS += src/bitree.c
 
 OBJS=$(patsubst %.c,%.o,$(SRCS))
