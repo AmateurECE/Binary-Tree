@@ -11,7 +11,7 @@
  *
  * CREATED:	    11/06/2017
  *
- * LAST EDITED:	    11/25/2017
+ * LAST EDITED:	    11/26/2017
  ***/
 
 /*******************************************************************************
@@ -363,8 +363,8 @@ bitree * bitree_ninorder(bitree * node)
   if (node == NULL || *(node->size) == 1)
     return node;
   if (node->root == node)
-    return ninorder_helper(node->left, node);
-  else if (node->right != NULL)
+    return ninorder_helper(node->right, node);
+  if (node->right != NULL)
     return ninorder_helper(node->right, node);
   return ninorder_helper(node->parent, node);
 }
@@ -479,14 +479,14 @@ static bitree * ninorder_helper(bitree * node, bitree * original)
     return node;
   }
   /* Recursing upwards */
-  else if (original->parent == node) {
+  else if (original->parent == node && node->root->right != original) {
     if (node->left == original)
       return node;
     if (node->right == original)
       return ninorder_helper(node->parent, node);
   }
 
-  return NULL;
+  return ninorder_helper(node->root->left, node->root);
 }
 
 /******************************************************************************/

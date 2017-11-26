@@ -7,7 +7,7 @@
  *
  * CREATED:	    11/25/2017
  *
- * LAST EDITED:	    11/25/2017
+ * LAST EDITED:	    11/26/2017
  ***/
 
 /*******************************************************************************
@@ -85,7 +85,47 @@ int main(int argc, char * argv[])
 	  test_npostorder()	? FAIL"Fail"NC : PASS"Pass"NC,
 	  test_ninorder()	? FAIL"Fail"NC : PASS"Pass"NC);
 
-  return 0; /* Not required by spec, but it is by GCC 7. */
+#ifdef CONFIG_EXTENDED_TRAVERSAL_TEST
+
+  printf("\n"FAIL"Pre-Order Test:"NC"\n");
+  bitree * test_tree = prep_tree();
+  print_tree(test_tree, 0);
+  printf("\n");
+  bitree * test_node = test_tree;
+  int i = 0;
+  do {
+    test_node = bitree_npreorder(test_node);
+    printf("%d: %p\n", i++, test_node);
+  } while (test_node != NULL && test_node != test_tree);
+  bitree_destroy(&test_tree);
+
+  printf("\n"FAIL"Post-Order Test:"NC"\n");
+  test_tree = prep_tree();
+  print_tree(test_tree, 0);
+  printf("\n");
+  test_node = test_tree;
+  i = 0;
+  do {
+    test_node = bitree_npostorder(test_node);
+    printf("%d: %p\n", i++, test_node);
+  } while (test_node != NULL && test_node != test_tree);
+  bitree_destroy(&test_tree);
+
+  printf("\n"FAIL"In-Order Test:"NC"\n");
+  test_tree = prep_tree();
+  print_tree(test_tree, 0);
+  printf("\n");
+  test_node = test_tree;
+  i = 0;
+  do {
+    test_node = bitree_ninorder(test_node);
+    printf("%d: %p\n", i++, test_node);
+  } while (test_node != NULL && test_node != test_tree);
+  bitree_destroy(&test_tree);
+
+#endif /* CONFIG_EXTENDED_TRAVERSAL_TEST */
+
+  return 0;
 }
 
 
@@ -655,7 +695,7 @@ static int test_ninorder()
     return 1;
 
   /* Next node does not exist */
-  if (bitree_ninorder(test->right) != test)
+  if (bitree_ninorder(test) != test->right)
     return 1;
 
   bitree_destroy(&test);
