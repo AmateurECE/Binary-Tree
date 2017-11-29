@@ -11,7 +11,7 @@
  *
  * CREATED:	    11/06/2017
  *
- * LAST EDITED:	    11/26/2017
+ * LAST EDITED:	    11/29/2017
  ***/
 
 /*******************************************************************************
@@ -96,7 +96,12 @@ void bitree_destroy(bitree ** tree)
   if (tree == NULL || *tree == NULL)
     return;
   
-  bitree_rem(*tree);
+  bitree_rem((*tree)->left);
+  bitree_rem((*tree)->right);
+  /* free((*tree)->size); */
+  if ((*tree)->destroy != NULL)
+    (*tree)->destroy((*tree)->data);
+  free(*tree);
 
   /* bitree_rem() frees the memory, so *tree now contains garbage. Let's
    * make that a little more safe.
@@ -214,6 +219,8 @@ void bitree_rem(bitree * node)
       node->parent->right = NULL;
   }
 
+  if (node->destroy != NULL)
+    node->destroy(node->data);
   free(node);
 }
 

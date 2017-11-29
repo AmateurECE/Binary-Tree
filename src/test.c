@@ -7,7 +7,7 @@
  *
  * CREATED:	    11/25/2017
  *
- * LAST EDITED:	    11/26/2017
+ * LAST EDITED:	    11/29/2017
  ***/
 
 /*******************************************************************************
@@ -783,7 +783,8 @@ static bitree * prep_tree()
   break_loop:
     break;
   }
-  
+
+  free(pTest);
   return tree;
 
  error_exit: {
