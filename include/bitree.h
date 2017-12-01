@@ -28,6 +28,44 @@
 #define bitree_parent(tree)	((tree)->parent)
 #define bitree_data(tree)	((tree)->data)
 
+/* These macros expand to function definitions which can be used to traverse the
+ * tree in a standard way and perform arbitrary operations on each node. The
+ * motivation for doing it this was is so that the user is not limited by C's
+ * function types. It's a cheap alternative to lambda programming.
+ *
+ * Example of use:
+ *
+ * DEFINE_PREORDER_TRAVERSAL(preorder_increment, {*(int *)(node->data) += 1;});
+ *	...
+ * preorder_increment(treeroot);
+ */
+#define DEFINE_PREORDER_TRAVERSAL(name, action)	\
+  void name(bitree * node) {			\
+    if (node == NULL)				\
+      return;					\
+    action;					\
+    name(node->left);				\
+    name(node->right);				\
+  }
+
+#define DEFINE_POSTORDER_TRAVERSAL(name, action)	\
+  void name(bitree * node) {				\
+    if (node == NULL)					\
+      return;						\
+    name(node->left);					\
+    name(node->right);					\
+    action;						\
+  }
+
+#define DEFINE_INORDER_TRAVERSAL(name, action)	\
+  void name(bitree * node) {			\
+    if (node == NULL)				\
+      return;					\
+    name(node->left);				\
+    action;					\
+    name(node->right);				\
+  }
+
 /*******************************************************************************
  * TYPE DEFINITIONS
  ***/
@@ -39,7 +77,7 @@ typedef struct _Node_ {
   struct _Node_ * parent;
   struct _Node_ * left;
   struct _Node_ * right;
-  
+
   int * size;
   void (*destroy)(void *);
   void * data;
@@ -84,7 +122,7 @@ extern void bitree_rem(bitree * node);
  *     return NULL;
  *   (*(int *)(tree->data))++;
  *  } while (tree != tree->root);
-*/
+ */
 extern bitree * bitree_npreorder(bitree * node);
 extern bitree * bitree_npostorder(bitree * node);
 extern bitree * bitree_ninorder(bitree * node);

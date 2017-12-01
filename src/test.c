@@ -37,6 +37,10 @@
 
 #define NC	"\033[0m"
 
+DEFINE_PREORDER_TRAVERSAL(preorder_test, {*(int *)(node->data) += 1;});
+DEFINE_POSTORDER_TRAVERSAL(postorder_test, {*(int *)(node->data) += 1;});
+DEFINE_INORDER_TRAVERSAL(inorder_test, {*(int *)(node->data) += 1;});
+
 /*******************************************************************************
  * STATIC FUNCTION PROTOTYPES
  ***/
@@ -52,6 +56,7 @@ static int test_npostorder(void);
 static int test_ninorder(void);
 
 static void print_tree(bitree * bitree, size_t null);
+static void print_data(bitree * bitree);
 static bitree * prep_tree(void);
 
 /*******************************************************************************
@@ -123,6 +128,37 @@ int main(int argc, char * argv[])
   bitree_destroy(&test_tree);
 
 #endif /* CONFIG_EXTENDED_TRAVERSAL_TEST */
+
+#ifdef CONFIG_MACRO_TRAVERSAL_TEST
+
+  printf("\n"FAIL"Pre-Order MACRO Test:"NC"\n");
+  bitree * test2_tree = prep_tree();
+  printf("Before:\t");
+  print_data(test2_tree);
+  preorder_test(test2_tree);
+  printf("After:\t");
+  print_data(test2_tree);
+  bitree_destroy(&test2_tree);
+
+  printf("\n"FAIL"Post-Order MACRO Test:"NC"\n");
+  test2_tree = prep_tree();
+  printf("Before:\t");
+  print_data(test2_tree);
+  postorder_test(test2_tree);
+  printf("After:\t");
+  print_data(test2_tree);
+  bitree_destroy(&test2_tree);
+
+  printf("\n"FAIL"In-Order MACRO Test:"NC"\n");
+  test2_tree = prep_tree();
+  printf("Before:\t");
+  print_data(test2_tree);
+  inorder_test(test2_tree);
+  printf("After:\t");
+  print_data(test2_tree);
+  bitree_destroy(&test2_tree);
+
+#endif /* CONFIG_MACRO_TRAVERSAL_TEST */
 
   return 0;
 }
@@ -715,6 +751,34 @@ void print_tree(bitree * bitree, size_t null)
 	 bitree);
   print_tree(bitree->left, ++null);
   print_tree(bitree->right, null);
+}
+
+/*******************************************************************************
+ * FUNCTION:	    print_data
+ *
+ * DESCRIPTION:	    This function prints all of the integer data in a tree to
+ *		    STDOUT in the format of a C array.
+ *
+ * ARGUMENTS:	    bitree: (bitree *) -- the tree to print
+ *
+ * RETURN:	    void.
+ *
+ * NOTES:	    none.
+ ***/
+static void print_data(bitree * bitree)
+{
+  if (bitree == NULL)
+    return;
+  if (bitree == bitree->root)
+    printf("{ %d", *(int *)bitree->data);
+  else
+    printf(", %d", *(int *)bitree->data);
+
+  print_data(bitree->left);
+  print_data(bitree->right);
+
+  if (bitree == bitree->root)
+    printf(" };\n");
 }
 
 /*******************************************************************************

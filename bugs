@@ -1,1 +1,1 @@
-./src/bitree.c: Create traversal_define() macros | id:32a7243a6e0772ac7cf31dbbcc9c4ab9af6672bd
+./src/bitree.c: Add level-order functions/macros and height calculator. | id:1ceb55abb6d42b45bab51ee97762737aa0cf0a99

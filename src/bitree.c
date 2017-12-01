@@ -27,16 +27,7 @@
  * STATIC FUNCTION PROTOTYPES
  ***/
 
-/* TODO: Create traversal_define() macros
- * Example: #define DEFINE_TRAVERSAL(type, name, action)
- * -> name(bitree * node) { /\* Do traversal of type, perform action *\/ }
- * This allows the user to do whatever they want without being limited by C's
- * function types. For example, if my data is just integers, and I only wanted
- * to increment each one in the tree, I could do it like this:
- *
- * DEFINE_TRAVERSAL(PREORDER, traverse_and_increment, {*(node->data)++;});
- * /\* And then later, call: *\/
- * traverse_and_increment(treeroot);
+/* TODO: Add level-order functions/macros and height calculator.
  */
 
 /* Helper functions used by the 'traverse-type' functions. */

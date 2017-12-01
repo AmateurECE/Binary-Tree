@@ -7,13 +7,16 @@
 #
 # CREATED:	    11/06/2017
 #
-# LAST EDITED:	    11/26/2017
+# LAST EDITED:	    12/01/2017
 ###
 
 TOP:=$(PWD)
 CC=gcc
-CFLAGS= -g -Wall -O0 -DCONFIG_DEBUG \
-	-DCONFIG_EXTENDED_TRAVERSAL_TEST -I$(TOP)/include/
+CFLAGS= -g -Wall -O0 \
+	-DCONFIG_DEBUG \
+	-DCONFIG_EXTENDED_TRAVERSAL_TEST \
+	-DCONFIG_MACRO_TRAVERSAL_TEST \
+	-I$(TOP)/include/
 
 SRCS += src/bitree.c
 SRCS += src/test.c
@@ -34,7 +37,7 @@ test: force $(OBJS)
 $(OBJS): force
 
 clean:
-	rm -f $(TOP)/src/test.o
+	@rm -f $(TOP)/src/test.o
 
 force:
 
