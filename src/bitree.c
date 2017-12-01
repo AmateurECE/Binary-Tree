@@ -96,12 +96,7 @@ void bitree_destroy(bitree ** tree)
   if (tree == NULL || *tree == NULL)
     return;
   
-  bitree_rem((*tree)->left);
-  bitree_rem((*tree)->right);
-  /* free((*tree)->size); */
-  if ((*tree)->destroy != NULL)
-    (*tree)->destroy((*tree)->data);
-  free(*tree);
+  bitree_rem(*tree);
 
   /* bitree_rem() frees the memory, so *tree now contains garbage. Let's
    * make that a little more safe.
