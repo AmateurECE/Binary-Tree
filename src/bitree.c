@@ -98,7 +98,7 @@ bitree * bitree_create(void (*destroy)(void *), void * data)
  * FUNCTION:	    bitree_destroy
  *
  * DESCRIPTION:	    Removes, if any, all elements from the tree, then frees all
- *		    internal associated memory and sets `*tree' to point to NULL
+ *		    internal associated memory. Does not set `*tree' to NULL.
  *
  * ARGUMENTS:	    tree: (bitree **) -- pointer to the tree pointer to free.
  *
@@ -112,11 +112,6 @@ void bitree_destroy(bitree ** tree)
     return;
   
   bitree_rem(*tree);
-
-  /* bitree_rem() frees the memory, so *tree now contains garbage. Let's
-   * make that a little more safe.
-   */
-  *tree = NULL;
 }
 
 /*******************************************************************************
@@ -248,6 +243,7 @@ void bitree_rem(bitree * node)
  *
  * NOTES:	    See the documentation in bitree.h for a full explanation
  *		    of this functions behaviour.
+ *		    TODO: Update to be O(n), n is the size of the smallest tree.
  ***/
 int bitree_merge(bitree * tree1, bitree * tree2, void * data)
 {

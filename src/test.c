@@ -7,7 +7,7 @@
  *
  * CREATED:	    11/25/2017
  *
- * LAST EDITED:	    11/29/2017
+ * LAST EDITED:	    12/01/2017
  ***/
 
 /*******************************************************************************
@@ -159,14 +159,10 @@ static int test_create()
   if ((test = bitree_create(NULL, pTest)) == NULL)
     return 1;
   bitree_destroy(&test);
-  if (test != NULL)
-    return 1;
 
   if ((test = bitree_create(free, pTest)) == NULL)
     return 1;
   bitree_destroy(&test);
-  if (test != NULL)
-    return 1;
 
   if ((test = bitree_create(free, NULL)) != NULL)
     return 1;
@@ -204,8 +200,6 @@ static int test_destroy()
   if ((test = bitree_create(free, pTest)) == NULL)
     return 1;
   bitree_destroy(&test);
-  if (test != NULL)
-    goto error_exit;
 
   /* Non-empty tree */
   pTest = malloc(sizeof(int));
@@ -215,24 +209,20 @@ static int test_destroy()
   if ((test = bitree_create(free, pTest)) == NULL)
     return 1;
   /* Add stuff to the tree */
-  pTest = NULL;
+  bitree * next = test;
   for (int i = 0; i < 5; i++) {
     if ((pTest = malloc(sizeof(int))) == NULL)
       goto error_exit;
     *pTest = rand() % 20;
-    if (bitree_insl(test, (void *)pTest))
+    if (bitree_insl(next, (void *)pTest))
       goto error_exit;
-    test = bitree_left(test);
+    next = bitree_left(next);
   }
-  bitree_destroy(&test);
-  if (test != NULL)
-    goto error_exit;
 
+  bitree_destroy(&test);
   return 0;
 
  error_exit: {
-    if (test != NULL)
-      bitree_destroy(&test);
     if (pTest != NULL)
       free(pTest);
     return 1;    
@@ -275,6 +265,9 @@ static int test_insl()
     goto error_exit;
 
   /* Insertion into non-empty node */
+  if ((pTest = malloc(sizeof(int))) == NULL)
+    return 1;
+  *pTest = rand() % 20;
   if (bitree_insl(test, pTest))
     goto error_exit;
   if (test->left == NULL)
@@ -284,14 +277,10 @@ static int test_insl()
   if (!bitree_insl(test, pTest))
     goto error_exit;
   bitree_destroy(&test);
-  if (test != NULL)
-    goto error_exit;
   
   return 0;
 
  error_exit: {
-    if (test != NULL)
-      bitree_destroy(&test);
     if (pTest != NULL)
       free(pTest);
     return 1;
@@ -334,6 +323,9 @@ static int test_insr()
     goto error_exit;
 
   /* Insertion into non-empty node */
+  if ((pTest = malloc(sizeof(int))) == NULL)
+    return 1;
+  *pTest = rand() % 20;
   if (bitree_insr(test, pTest))
     goto error_exit;
   if (test->right == NULL)
@@ -343,14 +335,10 @@ static int test_insr()
   if (!bitree_insr(test, pTest))
     goto error_exit;
   bitree_destroy(&test);
-  if (test != NULL)
-    goto error_exit;
 
   return 0;
 
  error_exit: {
-    if (test != NULL)
-      bitree_destroy(&test);
     if (pTest != NULL)
       free(pTest);
     return 1;
@@ -384,13 +372,15 @@ static int test_rem()
   /* NULL */
   bitree_rem(test);
 
+  /* Remove an existing node */
   if ((pTest = malloc(sizeof(int))) == NULL)
     goto error_exit;
   *pTest = rand() % 20;
-
-  /* Remove an existing node */
   if ((test = bitree_create(free, pTest)) == NULL)
     goto error_exit;
+  if ((pTest = malloc(sizeof(int))) == NULL)
+    goto error_exit;
+  *pTest = rand() % 20;
   if (bitree_insl(test, (void *)pTest))
     goto error_exit;
   bitree_rem(test->left);
@@ -406,8 +396,6 @@ static int test_rem()
   return 0;
 
  error_exit: {
-    if (test != NULL)
-      bitree_destroy(&test);
     if (pTest != NULL)
       free(pTest);
     return 1;
@@ -447,19 +435,23 @@ static int test_merge()
 
   bitree * test1 = prep_tree();
   bitree * test2 = prep_tree();
-  int * pTest = malloc(sizeof(int));
+  int * pTest = NULL;
+  if ((pTest = malloc(sizeof(int))) == NULL)
+    return 1;
   *pTest = 1;
   if (test1 == NULL || test2 == NULL || pTest == NULL)
     return 1;
 
+  /* Case 1 */
   /* isroot(tree1) && isfull(tree1) && isroot(tree2) && data */
   if (bitree_merge(test1, test2, pTest))
     return 1;
 
   /* Reset trees */
-  bitree_destroy(&test1);
-  pTest = malloc(sizeof(int));
-  *pTest = 1;
+  bitree_destroy(&(test1->root));
+  if ((pTest = malloc(sizeof(int))) == NULL)
+    return 1;
+  *pTest = rand() % 20;
   test1 = prep_tree(), test2 = prep_tree();
   if (test1 == NULL || test2 == NULL)
     return 1;
@@ -479,8 +471,6 @@ static int test_merge()
 
   /* Reset trees */
   bitree_destroy(&test1);
-  pTest = malloc(sizeof(int));
-  *pTest = 1;
   test1 = prep_tree(), test2 = prep_tree();
   if (test1 == NULL || test2 == NULL)
     return 1;
@@ -491,8 +481,6 @@ static int test_merge()
 
   /* Reset trees */
   bitree_destroy(&test1);
-  pTest = malloc(sizeof(int));
-  *pTest = 1;
   test1 = prep_tree(), test2 = prep_tree();
   if (test1 == NULL || test2 == NULL)
     return 1;
@@ -527,8 +515,6 @@ static int test_merge()
 
   /* Reset trees */
   bitree_destroy(&test1);
-  pTest = malloc(sizeof(int));
-  *pTest = 1;
   test1 = prep_tree(), test2 = prep_tree();
   if (test1 == NULL || test2 == NULL)
     return 1;
@@ -541,6 +527,7 @@ static int test_merge()
   /* isroot(tree1) && !isfull(tree1) && isroot(tree2) && !data   -> 0 */
 
   bitree_destroy(&test1);
+  free(pTest);
   return 0;
 }
 
@@ -788,8 +775,6 @@ static bitree * prep_tree()
   return tree;
 
  error_exit: {
-    if (tree != NULL)
-      bitree_destroy(&tree);
     if (pTest != NULL)
       free(pTest);
     return NULL;
