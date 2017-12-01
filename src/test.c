@@ -51,8 +51,7 @@ static int test_npreorder(void);
 static int test_npostorder(void);
 static int test_ninorder(void);
 
-/* TODO: make print_tree static */
-void print_tree(bitree * bitree, size_t null);
+static void print_tree(bitree * bitree, size_t null);
 static bitree * prep_tree(void);
 
 /*******************************************************************************
