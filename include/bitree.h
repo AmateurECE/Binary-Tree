@@ -67,7 +67,8 @@ extern int bitree_insl(bitree * parent, void * data);
  */
 extern int bitree_insr(bitree * parent, void * data);
 
-/* Remove `node' and all of its subnodes from the tree
+/* Remove `node' and all of its subnodes from the tree. Attempting to remove a
+ * node twice will cause a segfault, so don't do that.
  */
 extern void bitree_rem(bitree * node);
 

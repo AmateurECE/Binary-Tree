@@ -389,9 +389,9 @@ static int test_rem()
   /* Tree is empty, non-existing node. */
   bitree_rem(test->left);
   bitree_rem(test);
-  /* Calling bitree_rem() twice on a node will cause a segfault.
-   * TODO: Prevent segfault on double remove? */
-  /* bitree_rem(test); */
+  /* Calling bitree_rem() twice on a node will cause a segfault. Don't do that.
+   * bitree_rem(test);
+   */
   return 0;
 
  error_exit: {
