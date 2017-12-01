@@ -1,8 +1,9 @@
 ./src/bitree.c: Add time complexity. Add space complexity? | id:0a203c990a12efd869e347edeb523a4da63c613d
 ./src/test.c: Prevent segfault on double remove? */ | id:276430eee782d8f8d2dfe738a58c3cc851b992b1
+./src/bitree.c: Create traversal_define() macros | id:32a7243a6e0772ac7cf31dbbcc9c4ab9af6672bd
 ./src/test.c: make print_tree static */ | id:3a1e3680aea93c27bc06911030a00a6898c20de9
 ./include/bitree.h: Fix the documentation here. */ | id:8f2a13802e0ade36249e9240d5ff38829285321c
 ./src/bitree.c: Add height member */ | id:c0f2942665c61733a8ff07b685a3dbfa32e1f322
+./src/bitree.c: Update to be O(n), n is the size of the smallest tree. | id:e5c611eff622855884e20dff7440c3e4a54796bd
 ./src/bitree.c: Redesign bitree_rem with tail-recursion & error reporting */ | id:f1c79dce16193fc2388483c7554c8809dc7df1a4
-./src/bitree.c: Recursively update .size & .root */ | id:fa9344316aaf8eab46ed63799a0218d0f2254fda
 ./README.md: insert the tree picture here. --> | id:ff0704194a8b467dfb943643667280e20ea584ff

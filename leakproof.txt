@@ -1,0 +1,62 @@
+==29818== Memcheck, a memory error detector
+==29818== Copyright (C) 2002-2015, and GNU GPL'd, by Julian Seward et al.
+==29818== Using Valgrind-3.11.0 and LibVEX; rerun with -h for copyright info
+==29818== Command: ./bitree
+==29818== 
+Test (bitree_create):		[1;39mPass[0m
+Test (bitree_destroy):		[1;39mPass[0m
+Test (bitree_insl):		[1;39mPass[0m
+Test (bitree_insr):		[1;39mPass[0m
+Test (btiree_rem):		[1;39mPass[0m
+Test (bitree_merge):		[1;39mPass[0m
+Test (bitree_npreorder):	[1;39mPass[0m
+Test (bitree_npostorder):	[1;39mPass[0m
+Test (bitree_ninorder):		[1;39mPass[0m
+
+[1;31mPre-Order Test:[0m
+--->
+| 0x520a0a0 --->
+	L 0x520a1c0 --->
+		L 0x520a290 --->
+		R 0x520a360 --->
+	R 0x520a430 
+0: 0x520a1c0
+1: 0x520a290
+2: 0x520a360
+3: 0x520a430
+4: 0x520a0a0
+
+[1;31mPost-Order Test:[0m
+--->
+| 0x520a550 --->
+	L 0x520a670 --->
+		L 0x520a740 --->
+		R 0x520a810 --->
+	R 0x520a8e0 
+0: 0x520a740
+1: 0x520a810
+2: 0x520a670
+3: 0x520a8e0
+4: 0x520a550
+
+[1;31mIn-Order Test:[0m
+--->
+| 0x520aa00 --->
+	L 0x520ab20 --->
+		L 0x520abf0 --->
+		R 0x520acc0 --->
+	R 0x520ad90 
+0: 0x520ad90
+1: 0x520abf0
+2: 0x520ab20
+3: 0x520acc0
+4: 0x520aa00
+==29818== 
+==29818== HEAP SUMMARY:
+==29818==     in use at exit: 0 bytes in 0 blocks
+==29818==   total heap usage: 242 allocs, 242 frees, 10,208 bytes allocated
+==29818== 
+==29818== All heap blocks were freed -- no leaks are possible
+==29818== 
+==29818== For counts of detected and suppressed errors, rerun with: -v
+==29818== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
