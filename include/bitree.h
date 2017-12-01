@@ -8,7 +8,7 @@
  *
  * CREATED:	    11/06/2017
  *
- * LAST EDITED:	    11/16/2017
+ * LAST EDITED:	    12/01/2017
  ***/
 
 #ifndef __ET_BITREE_H_
@@ -18,6 +18,7 @@
  * MACRO DEFINITIONS
  ***/
 
+/* Macro definitions for basic manipulation of the tree */
 #define bitree_isempty(tree)	((tree)->size == 0)
 #define bitree_isleaf(tree)	((tree)->left == NULL && (tree)->right == NULL)
 #define bitree_left(tree)	((tree)->left)
@@ -31,6 +32,7 @@
  * TYPE DEFINITIONS
  ***/
 
+/* The whole binary tree is contained within this struct */
 typedef struct _Node_ {
 
   struct _Node_ * root;
@@ -48,29 +50,46 @@ typedef struct _Node_ {
  * API FUNCTION PROTOTYPES
  ***/
 
-/* TODO: Fix the documentation here. */
-
+/* This function creates a bitree struct with the parameters given and returns a
+ * pointer to it.
+ */
 extern bitree * bitree_create(void (*destroy)(void *), void * data);
-/* Even if the node that is passed is not the root node, the whole tree is
- * destroyed
+
+/* This function is essentially an alias for bitree_rem()
  */
 extern void bitree_destroy(bitree ** tree);
+
+/* Insert a new node with data `data' left of the node `parent'
+ */
 extern int bitree_insl(bitree * parent, void * data);
+
+/* Insert a new node with data `data' right of the node `parent'
+ */
 extern int bitree_insr(bitree * parent, void * data);
+
+/* Remove `node' and all of its subnodes from the tree
+ */
 extern void bitree_rem(bitree * node);
 
 /* These functions return the next node struct in a tree traversal, assuming
  * the algorithm specified (or NULL if there is no more). They can be used in
  * loop structures, for flow control, or to develop complex and efficient
  * traversal algorithms.
- */
+ *
+ * Example of usage:
+ *
+ * do {
+ *   if ((tree = bitree_npreorder(tree)) == NULL) /\* Or any other function *\/
+ *     return NULL;
+ *   (*(int *)(tree->data))++;
+ *  } while (tree != tree->root);
+*/
 extern bitree * bitree_npreorder(bitree * node);
 extern bitree * bitree_npostorder(bitree * node);
 extern bitree * bitree_ninorder(bitree * node);
 extern bitree * bitree_nlevelorder(bitree * node);
 
-/**
- * This merging function is greedy, and uses any means possible to merge the two
+/* This merging function is greedy, and uses any means possible to merge the two
  * trees it is passed. There is generally two cases which affect the behaviour
  * of this function:
  *
