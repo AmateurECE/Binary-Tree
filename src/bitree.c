@@ -439,7 +439,7 @@ static bitree * npreorder_helper(bitree * node, bitree * original)
  *
  * RETURN:	    bitree * -- pointer to the next node in postorder traversal.
  *
- * NOTES:	    TODO: Add time complexity. Add space complexity?
+ * NOTES:	    none.
  ***/
 static bitree * npostorder_helper(bitree * node, bitree * original)
 {
@@ -479,7 +479,7 @@ static bitree * npostorder_helper(bitree * node, bitree * original)
  *
  * RETURN:	    bitree * -- pointer to the next node in inorder traversal.
  *
- * NOTES:	    TODO: Add time complexity. Add space complexity?
+ * NOTES:	    none.
  ***/
 static bitree * ninorder_helper(bitree * node, bitree * original)
 {
