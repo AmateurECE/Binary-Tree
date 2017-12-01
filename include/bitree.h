@@ -157,6 +157,10 @@ extern int bitree_merge(bitree * tree1, bitree * tree2, void * data);
  */
 extern int bitree_height(bitree * tree);
 
+/* Calculate the distance from the root
+ */
+extern int bitree_distance(bitree * tree);
+
 #endif /* __ET_BITREE_H_ */
 
 /******************************************************************************/

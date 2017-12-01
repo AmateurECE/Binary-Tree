@@ -55,6 +55,7 @@ static int test_npreorder(void);
 static int test_npostorder(void);
 static int test_ninorder(void);
 static int test_height(void);
+static int test_distance(void);
 
 static void print_tree(bitree * bitree, size_t null);
 static void print_data(bitree * bitree);
@@ -79,7 +80,8 @@ int main(int argc, char * argv[])
 	  "Test (bitree_npreorder):\t%s\n"
 	  "Test (bitree_npostorder):\t%s\n"
 	  "Test (bitree_ninorder):\t\t%s\n"
-	  "Test (bitree_height):\t\t%s\n",
+	  "Test (bitree_height):\t\t%s\n"
+	  "Test (bitree_distance):\t\t%s\n",
 
 	  test_create()	    	? FAIL"Fail"NC : PASS"Pass"NC,
 	  test_destroy()	? FAIL"Fail"NC : PASS"Pass"NC,
@@ -90,7 +92,8 @@ int main(int argc, char * argv[])
 	  test_npreorder()	? FAIL"Fail"NC : PASS"Pass"NC,
 	  test_npostorder()	? FAIL"Fail"NC : PASS"Pass"NC,
 	  test_ninorder()	? FAIL"Fail"NC : PASS"Pass"NC,
-	  test_height()		? FAIL"Fail"NC : PASS"Pass"NC);
+	  test_height()		? FAIL"Fail"NC : PASS"Pass"NC,
+	  test_distance()	? FAIL"Fail"NC : PASS"Pass"NC);
 
 #ifdef CONFIG_EXTENDED_TRAVERSAL_TEST
 
@@ -763,6 +766,53 @@ static int test_height()
   if ((test = prep_tree()) == NULL)
     return 1;
   if (bitree_height(test) != 3)
+    return 1;
+
+  bitree_destroy(&test);
+  return 0;
+}
+
+/*******************************************************************************
+ * FUNCTION:	    test_distance
+ *
+ * DESCRIPTION:	    This function tests the bitree_distance() function.
+ *
+ * ARGUMENTS:	    none.
+ *
+ * RETURN:	    int -- 0 if the test passes, 1 otherwise.
+ *
+ * NOTES:	    none.
+ ***/
+static int test_distance()
+{
+  /* NULL Input,
+   * Distance of 0,
+   * Distance of 1,
+   * Distance of >1
+   */
+
+  bitree * test = NULL;
+  int distance = 0;
+
+  /* NULL Input */
+  if (bitree_distance(test) != -1)
+    return 1;
+
+  /* Distance of 0 */
+  if ((test = bitree_create(NULL, (void *)&distance)) == NULL)
+    return 1;
+  if (bitree_distance(test))
+    return 1;
+  bitree_destroy(&test);
+
+  /* Distance of 1 */
+  if ((test = prep_tree()) == NULL)
+    return 1;
+  if (bitree_distance(test->right) != 1)
+    return 1;
+
+  /* Distance of >1 */
+  if (bitree_distance(test->left->right) != 2)
     return 1;
 
   bitree_destroy(&test);

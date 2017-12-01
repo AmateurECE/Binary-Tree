@@ -38,6 +38,9 @@ static bitree * ninorder_helper(bitree * node, bitree * original);
 /* Used by bitree_merge to update tree parameters */
 static int update_size(bitree * node, int * size, bitree * root);
 
+/* Used by bitree_distance() */
+static int distance_helper(bitree * node, int distance);
+
 /*******************************************************************************
  * API FUNCTIONS
  ***/
@@ -404,6 +407,25 @@ int bitree_height(bitree * tree)
 }
 
 /*******************************************************************************
+ * FUNCTION:	    bitree_distance
+ *
+ * DESCRIPTION:	    Calculate the distance from the root node.
+ *
+ * ARGUMENTS:	    tree: (bitree *) -- the node to calculate the distance of.
+ *
+ * RETURN:	    int -- the distance from the root node, or -1 if an error
+ *		    has occurred.
+ *
+ * NOTES:	    O(log(n))
+ ***/
+int bitree_distance(bitree * tree)
+{
+  if (tree == NULL)
+    return -1;
+  return distance_helper(tree, 0);
+}
+
+/*******************************************************************************
  * STATIC FUNCTIONS
  ***/
 
@@ -546,6 +568,26 @@ static int update_size(bitree * node, int * size, bitree * root)
   update_size(node->left, size, root);
   update_size(node->right, size, root);
   return 0;
+}
+
+/*******************************************************************************
+ * FUNCTION:	    distance_helper
+ *
+ * DESCRIPTION:	    Helper function for bitree_distance--performs the recurstion
+ *
+ * ARGUMENTS:	    node: (bitree *) -- the current node (during recursion)
+ *		    distance: (int) -- the current distance from the root.
+ *
+ * RETURN:	    int -- (hopefully) the distance from the root node. -1 if
+ *		    an error has occurred.
+ *
+ * NOTES:	    none.
+ ***/
+static int distance_helper(bitree * node, int distance)
+{
+  if (node == NULL)
+    return --distance;
+  return distance_helper(node->parent, ++distance);
 }
 
 /******************************************************************************/
