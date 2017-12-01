@@ -27,10 +27,25 @@
  * STATIC FUNCTION PROTOTYPES
  ***/
 
+/* TODO: Create traversal_define() macros
+ * Example: #define DEFINE_TRAVERSAL(type, name, action)
+ * -> name(bitree * node) { /\* Do traversal of type, perform action *\/ }
+ * This allows the user to do whatever they want without being limited by C's
+ * function types. For example, if my data is just integers, and I only wanted
+ * to increment each one in the tree, I could do it like this:
+ *
+ * DEFINE_TRAVERSAL(PREORDER, traverse_and_increment, {*(node->data)++;});
+ * /\* And then later, call: *\/
+ * traverse_and_increment(treeroot);
+ */
+
 /* Helper functions used by the 'traverse-type' functions. */
 static bitree * npreorder_helper(bitree * node, bitree * original);
 static bitree * npostorder_helper(bitree * node, bitree * original);
 static bitree * ninorder_helper(bitree * node, bitree * original);
+
+/* Used by bitree_merge to update tree parameters */
+static int update_size(bitree * node, int * size, bitree * root);
 
 /*******************************************************************************
  * API FUNCTIONS
@@ -257,13 +272,15 @@ int bitree_merge(bitree * tree1, bitree * tree2, void * data)
 
     newroot->left = tree1;
     tree1->parent = newroot;
-    tree1->root = newroot; /* TODO: Recursively update .size & .root */
-    tree1->size = newroot->size;
 
     newroot->right = tree2;
     tree2->parent = newroot;
-    tree2->root = newroot;
-    tree2->size = newroot->size;
+
+    free(tree1->size);
+    free(tree2->size);
+
+    /* Recursively update `size' and `root' */
+    update_size(newroot, newroot->size, newroot);
   }
   /* Test for case 2 & case 3 */
   else if (tree1->left == NULL || tree1->right == NULL) {
@@ -274,8 +291,11 @@ int bitree_merge(bitree * tree1, bitree * tree2, void * data)
       tree1->right = tree2;
 
     tree2->parent = tree1;
-    tree2->root = tree1->root; /* Also update .size & .root here */
     *(tree1->root->size) += *(tree2->size);
+    free(tree2->size);
+
+    /* Recursively update `size' and `root' */
+    update_size(tree1->root, tree1->root->size, tree1->root);
 
   } else {
     return -1;
@@ -487,6 +507,31 @@ static bitree * ninorder_helper(bitree * node, bitree * original)
   }
 
   return ninorder_helper(node->root->left, node->root);
+}
+
+/*******************************************************************************
+ * FUNCTION:	    update_size
+ *
+ * DESCRIPTION:	    Called by bitree_merge to recursively update the 'size' and
+ *		    'root' parameter in each node of the tree.
+ *
+ * ARGUMENTS:	    node: (bitree *) -- the node to update
+ *		    size: (int *) -- pointer to the new size int.
+ *		    root: (bitree *) -- new root for the merged tree
+ *
+ * RETURN:	    int -- 0 on success, -1 otherwise.
+ *
+ * NOTES:	    none.
+ ***/
+static int update_size(bitree * node, int * size, bitree * root)
+{
+  if (node == NULL)
+    return 0;
+  node->size = size;
+  node->root = root;
+  update_size(node->left, size, root);
+  update_size(node->right, size, root);
+  return 0;
 }
 
 /******************************************************************************/
