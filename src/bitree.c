@@ -11,7 +11,7 @@
  *
  * CREATED:	    11/06/2017
  *
- * LAST EDITED:	    11/29/2017
+ * LAST EDITED:	    12/01/2017
  ***/
 
 /*******************************************************************************
@@ -204,10 +204,8 @@ void bitree_rem(bitree * node)
   if (node == NULL)
     return;
   /* TODO: Redesign bitree_rem with tail-recursion & error reporting */
-  if (node->left != NULL)
-    bitree_rem(node->left);
-  if (node->right != NULL)
-    bitree_rem(node->right); /* So many branch instructions...sigh */
+  bitree_rem(node->left);
+  bitree_rem(node->right);
 
   if (node->root == node) {
     free(node->size);    
