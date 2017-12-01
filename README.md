@@ -4,7 +4,6 @@ A <em>tree</em> is a hierarchical discrete structure which forms a subset of
 the class of discrete structures known as directed graphs. Specifically, it is
 acyclic, and may or may not be weighted. Specifically, a Binary Tree has no
 more than two children per node.
-<!-- TODO: insert the tree picture here. -->
 
 The structure of trees lends itself to different ways of traversing the tree.
 Traversing algorithms are not implemented as a part of this library, but they
