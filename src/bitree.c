@@ -240,8 +240,7 @@ void bitree_rem(bitree * node)
  *
  * RETURN:	    int -- 0 on success, -1 otherwise.
  *
- * NOTES:	    Theta(m + n); m = *(tree1->size), n = *(tree2->size)
- *		    TODO: Update to be Omega(n), n = size of the smallest tree.
+ * NOTES:	    O(m + n), Omega(n); m = *(tree1->size), n = *(tree2->size)
  ***/
 int bitree_merge(bitree * tree1, bitree * tree2, void * data)
 {
@@ -289,7 +288,7 @@ int bitree_merge(bitree * tree1, bitree * tree2, void * data)
     free(tree2->size);
 
     /* Recursively update `size' and `root' */
-    update_size(tree1->root, tree1->root->size, tree1->root);
+    update_size(tree2, tree1->root->size, tree1->root);
 
   } else {
     return -1;
