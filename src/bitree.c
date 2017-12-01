@@ -63,7 +63,7 @@ static int update_size(bitree * node, int * size, bitree * root);
  *
  * RETURN:	    bitree * -- pointer to new struct, or NULL.
  *
- * NOTES:	    none.
+ * NOTES:	    Theta(1)
  ***/
 bitree * bitree_create(void (*destroy)(void *), void * data)
 {
@@ -104,7 +104,7 @@ bitree * bitree_create(void (*destroy)(void *), void * data)
  *
  * RETURN:	    void.
  *
- * NOTES:	    none.
+ * NOTES:	    Theta(n)
  ***/
 void bitree_destroy(bitree ** tree)
 {
@@ -125,7 +125,7 @@ void bitree_destroy(bitree ** tree)
  *
  * RETURN:	    int -- 0 on success, -1 on failure.
  *
- * NOTES:	    none.
+ * NOTES:	    Theta(1)
  ***/
 int bitree_insl(bitree * parent, void * data)
 {
@@ -165,7 +165,7 @@ int bitree_insl(bitree * parent, void * data)
  *
  * RETURN:	    int -- 0 on success, -1 on failure.
  *
- * NOTES:	    none.
+ * NOTES:	    Theta(1)
  ***/
 int bitree_insr(bitree * parent, void * data)
 {
@@ -202,7 +202,7 @@ int bitree_insr(bitree * parent, void * data)
  *
  * RETURN:	    void
  *
- * NOTES:	    O(n), n is the size of the subtree
+ * NOTES:	    Theta(n), n is the size of the subtree
  ***/
 void bitree_rem(bitree * node)
 {
@@ -241,9 +241,8 @@ void bitree_rem(bitree * node)
  *
  * RETURN:	    int -- 0 on success, -1 otherwise.
  *
- * NOTES:	    See the documentation in bitree.h for a full explanation
- *		    of this functions behaviour.
- *		    TODO: Update to be O(n), n is the size of the smallest tree.
+ * NOTES:	    Theta(m + n); m = *(tree1->size), n = *(tree2->size)
+ *		    TODO: Update to be Omega(n), n = size of the smallest tree.
  ***/
 int bitree_merge(bitree * tree1, bitree * tree2, void * data)
 {
@@ -313,7 +312,8 @@ int bitree_merge(bitree * tree1, bitree * tree2, void * data)
  * RETURN:	    bitree * -- pointer to the next node, or NULL if there was
  *		    a problem.
  *
- * NOTES:	    THIS IS NOT A TRAVERSAL FUNCTION. It does not 'traverse' the
+ * NOTES:	    Omega(1), O(log(n))
+ *		    THIS IS NOT A TRAVERSAL FUNCTION. It does not 'traverse' the
  *		    tree in a traditional sense. See the documentation in the
  *		    header file.
  ***/
@@ -342,7 +342,8 @@ bitree * bitree_npreorder(bitree * node)
  * RETURN:	    bitree * -- pointer to the next node, or NULL if there was
  *		    a problem.
  *
- * NOTES:	    THIS IS NOT A TRAVERSAL FUNCTION. It does not 'traverse' the
+ * NOTES:	    Omega(1), O(log(n))
+ *		    THIS IS NOT A TRAVERSAL FUNCTION. It does not 'traverse' the
  *		    tree in a traditional sense. See the documentation in the
  *		    header file.
  *		    Post-Order traversals begin at the leftmost node. The user
@@ -370,9 +371,12 @@ bitree * bitree_npostorder(bitree * node)
  * RETURN:	    bitree * -- pointer to the next node, or NULL if there was
  *		    a problem.
  *
- * NOTES:	    THIS IS NOT A TRAVERSAL FUNCTION. It does not 'traverse' the
+ * NOTES:	    Omega(1), O(log(n))
+ *		    THIS IS NOT A TRAVERSAL FUNCTION. It does not 'traverse' the
  *		    tree in a traditional sense. See the documentation in the
  *		    header file.
+ *		    In-Order traversals begin at the leftmost node. The user
+ *		    should keep this in mind when using this function.
  ***/
 bitree * bitree_ninorder(bitree * node)
 {
@@ -402,7 +406,7 @@ bitree * bitree_ninorder(bitree * node)
  *
  * RETURN:	    bitree * -- pointer to the next node in preorder traversal.
  *
- * NOTES:	    TODO: Add time complexity. Add space complexity?
+ * NOTES:	    none.
  ***/
 static bitree * npreorder_helper(bitree * node, bitree * original)
 {
