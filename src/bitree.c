@@ -73,7 +73,6 @@ bitree * bitree_create(void (*destroy)(void *), void * data)
   if (tree == NULL)
     return NULL;
 
-  /* TODO: Add height member */
   *tree = (bitree){
     .root = tree,
     .parent = NULL,
