@@ -153,6 +153,10 @@ extern bitree * bitree_nlevelorder(bitree * node);
  */
 extern int bitree_merge(bitree * tree1, bitree * tree2, void * data);
 
+/* Calculate the height of the tree
+ */
+extern int bitree_height(bitree * tree);
+
 #endif /* __ET_BITREE_H_ */
 
 /******************************************************************************/

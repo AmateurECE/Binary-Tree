@@ -379,6 +379,31 @@ bitree * bitree_ninorder(bitree * node)
 }
 
 /*******************************************************************************
+ * FUNCTION:	    bitree_height
+ *
+ * DESCRIPTION:	    This function calculates the height of the tree.
+ *
+ * ARGUMENTS:	    tree: (bitree *) -- the tree.
+ *
+ * RETURN:	    int -- the height of the tree, or -1 if an error has
+ *		    occurred.
+ *
+ * NOTES:	    O(log(n))
+ ***/
+int bitree_height(bitree * tree)
+{
+  if (tree == NULL)
+    return 0;
+
+  int left = bitree_height(tree->left);
+  int right = bitree_height(tree->right);
+
+  if (left > right)
+    return left + 1;
+  return right + 1;
+}
+
+/*******************************************************************************
  * STATIC FUNCTIONS
  ***/
 

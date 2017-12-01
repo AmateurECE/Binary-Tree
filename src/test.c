@@ -54,6 +54,7 @@ static int test_merge(void);
 static int test_npreorder(void);
 static int test_npostorder(void);
 static int test_ninorder(void);
+static int test_height(void);
 
 static void print_tree(bitree * bitree, size_t null);
 static void print_data(bitree * bitree);
@@ -77,7 +78,8 @@ int main(int argc, char * argv[])
 	  "Test (bitree_merge):\t\t%s\n"
 	  "Test (bitree_npreorder):\t%s\n"
 	  "Test (bitree_npostorder):\t%s\n"
-	  "Test (bitree_ninorder):\t\t%s\n",
+	  "Test (bitree_ninorder):\t\t%s\n"
+	  "Test (bitree_height):\t\t%s\n",
 
 	  test_create()	    	? FAIL"Fail"NC : PASS"Pass"NC,
 	  test_destroy()	? FAIL"Fail"NC : PASS"Pass"NC,
@@ -87,7 +89,8 @@ int main(int argc, char * argv[])
 	  test_merge()		? FAIL"Fail"NC : PASS"Pass"NC,
 	  test_npreorder()	? FAIL"Fail"NC : PASS"Pass"NC,
 	  test_npostorder()	? FAIL"Fail"NC : PASS"Pass"NC,
-	  test_ninorder()	? FAIL"Fail"NC : PASS"Pass"NC);
+	  test_ninorder()	? FAIL"Fail"NC : PASS"Pass"NC,
+	  test_height()		? FAIL"Fail"NC : PASS"Pass"NC);
 
 #ifdef CONFIG_EXTENDED_TRAVERSAL_TEST
 
@@ -718,6 +721,48 @@ static int test_ninorder()
 
   /* Next node does not exist */
   if (bitree_ninorder(test) != test->right)
+    return 1;
+
+  bitree_destroy(&test);
+  return 0;
+}
+
+/*******************************************************************************
+ * FUNCTION:	    test_height
+ *
+ * DESCRIPTION:	    Test the bitree_height function.
+ *
+ * ARGUMENTS:	    none.
+ *
+ * RETURN:	    int -- 0 if the test passes, 1 otherwise.
+ *
+ * NOTES:	    none.
+ ***/
+static int test_height()
+{
+  /* NULL input
+   * One node in tree
+   * Multiple nodes in tree
+   */
+
+  int size = 0;
+  bitree * test = NULL;
+
+  /* NULL input */
+  if (bitree_height(test))
+    return 1;
+
+  /* One node in tree */
+  if ((test = bitree_create(NULL, (void *)&size)) == NULL)
+    return 1;
+  if (bitree_height(test) != 1)
+    return 1;
+  bitree_destroy(&test);
+
+  /* Multiple nodes in tree */
+  if ((test = prep_tree()) == NULL)
+    return 1;
+  if (bitree_height(test) != 3)
     return 1;
 
   bitree_destroy(&test);
