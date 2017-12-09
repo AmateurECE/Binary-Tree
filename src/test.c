@@ -7,7 +7,7 @@
  *
  * CREATED:	    11/25/2017
  *
- * LAST EDITED:	    12/01/2017
+ * LAST EDITED:	    12/09/2017
  ***/
 
 /*******************************************************************************
@@ -40,6 +40,7 @@
 DEFINE_PREORDER_TRAVERSAL(preorder_test, {*(int *)(node->data) += 1;});
 DEFINE_POSTORDER_TRAVERSAL(postorder_test, {*(int *)(node->data) += 1;});
 DEFINE_INORDER_TRAVERSAL(inorder_test, {*(int *)(node->data) += 1;});
+DEFINE_LEVELORDER_TRAVERSAL(levelorder_test, {*(int *)(node->data) += 1;});
 
 /*******************************************************************************
  * STATIC FUNCTION PROTOTYPES
@@ -160,6 +161,15 @@ int main(int argc, char * argv[])
   printf("Before:\t");
   print_data(test2_tree);
   inorder_test(test2_tree);
+  printf("After:\t");
+  print_data(test2_tree);
+  bitree_destroy(&test2_tree);
+
+  printf("\n"FAIL"Level-Order MACRO Test:"NC"\n");
+  test2_tree = prep_tree();
+  printf("Before:\t");
+  print_data(test2_tree);
+  levelorder_test(test2_tree);
   printf("After:\t");
   print_data(test2_tree);
   bitree_destroy(&test2_tree);

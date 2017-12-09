@@ -8,7 +8,7 @@
  *
  * CREATED:	    11/06/2017
  *
- * LAST EDITED:	    12/01/2017
+ * LAST EDITED:	    12/09/2017
  ***/
 
 #ifndef __ET_BITREE_H_
@@ -64,6 +64,26 @@
     name(node->left);				\
     action;					\
     name(node->right);				\
+  }
+
+#define DEFINE_LEVELORDER_TRAVERSAL(name, action)	\
+  static void name##_helper(bitree * node, int level) {	\
+    if (node == NULL)					\
+      return;						\
+							\
+    if (level == 1) {					\
+      action;						\
+    } else if (level > 1) {				\
+      name##_helper(node->left, level - 1);		\
+      name##_helper(node->right, level - 1);		\
+    }							\
+  }							\
+							\
+  void name(bitree * node) {				\
+    if (node == NULL)					\
+      return;						\
+    for (int i = 1; i <= bitree_height(node); i++)	\
+      name##_helper(node, i);				\
   }
 
 /*******************************************************************************

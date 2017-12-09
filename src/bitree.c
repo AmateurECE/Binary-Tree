@@ -27,7 +27,7 @@
  * STATIC FUNCTION PROTOTYPES
  ***/
 
-/* TODO: Add level-order functions/macros.
+/* TODO: Add level-order function.
  */
 
 /* Helper functions used by the 'traverse-type' functions. */
