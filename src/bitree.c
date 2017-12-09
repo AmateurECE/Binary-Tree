@@ -11,7 +11,7 @@
  *
  * CREATED:	    11/06/2017
  *
- * LAST EDITED:	    12/01/2017
+ * LAST EDITED:	    12/09/2017
  ***/
 
 /*******************************************************************************
@@ -27,7 +27,7 @@
  * STATIC FUNCTION PROTOTYPES
  ***/
 
-/* TODO: Add level-order functions/macros and height calculator.
+/* TODO: Add level-order functions/macros.
  */
 
 /* Helper functions used by the 'traverse-type' functions. */
