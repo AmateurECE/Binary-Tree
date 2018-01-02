@@ -1,4 +1,4 @@
-/*******************************************************************************
+/******************************************************************************
  * NAME:	    bitree.h
  *
  * AUTHOR:	    Ethan D. Twardy
@@ -8,13 +8,13 @@
  *
  * CREATED:	    11/06/2017
  *
- * LAST EDITED:	    12/09/2017
+ * LAST EDITED:	    01/01/2018
  ***/
 
 #ifndef __ET_BITREE_H_
 #define __ET_BITREE_H_
 
-/*******************************************************************************
+/******************************************************************************
  * MACRO DEFINITIONS
  ***/
 
@@ -28,10 +28,10 @@
 #define bitree_parent(tree)	((tree)->parent)
 #define bitree_data(tree)	((tree)->data)
 
-/* These macros expand to function definitions which can be used to traverse the
- * tree in a standard way and perform arbitrary operations on each node. The
- * motivation for doing it this was is so that the user is not limited by C's
- * function types. It's a cheap alternative to lambda programming.
+/* These macros expand to function definitions which can be used to traverse
+ * the tree in a standard way and perform arbitrary operations on each node.
+ * The motivation for doing it this was is so that the user is not limited by
+ * C's function types. It's a cheap alternative to lambda programming.
  *
  * Example of use:
  *
@@ -86,7 +86,7 @@
       name##_helper(node, i);				\
   }
 
-/*******************************************************************************
+/******************************************************************************
  * TYPE DEFINITIONS
  ***/
 
@@ -104,12 +104,12 @@ typedef struct _Node_ {
 
 } bitree;
 
-/*******************************************************************************
+/******************************************************************************
  * API FUNCTION PROTOTYPES
  ***/
 
-/* This function creates a bitree struct with the parameters given and returns a
- * pointer to it.
+/* This function creates a bitree struct with the parameters given and returns
+ * a pointer to it.
  */
 extern bitree * bitree_create(void (*destroy)(void *), void * data);
 
@@ -148,9 +148,9 @@ extern bitree * bitree_npostorder(bitree * node);
 extern bitree * bitree_ninorder(bitree * node);
 extern bitree * bitree_nlevelorder(bitree * node);
 
-/* This merging function is greedy, and uses any means possible to merge the two
- * trees it is passed. There is generally two cases which affect the behaviour
- * of this function:
+/* This merging function is greedy, and uses any means possible to merge the
+ * two trees it is passed. There is generally two cases which affect the
+ * behaviour of this function:
  *
  * Case 1: The node at `tree1' is the root of its tree, `tree1' already has two
  *	children, and `tree2' is the root of its tree.
@@ -183,4 +183,4 @@ extern int bitree_distance(bitree * tree);
 
 #endif /* __ET_BITREE_H_ */
 
-/******************************************************************************/
+/*****************************************************************************/

@@ -1,4 +1,4 @@
-/*******************************************************************************
+/******************************************************************************
  * NAME:	    bitree.c
  *
  * AUTHOR:	    Ethan D. Twardy
@@ -11,10 +11,10 @@
  *
  * CREATED:	    11/06/2017
  *
- * LAST EDITED:	    12/09/2017
+ * LAST EDITED:	    01/01/2018
  ***/
 
-/*******************************************************************************
+/******************************************************************************
  * INCLUDES
  ***/
 
@@ -23,7 +23,7 @@
 
 #include "bitree.h"
 
-/*******************************************************************************
+/******************************************************************************
  * STATIC FUNCTION PROTOTYPES
  ***/
 
@@ -41,11 +41,11 @@ static int update_size(bitree * node, int * size, bitree * root);
 /* Used by bitree_distance() */
 static int distance_helper(bitree * node, int distance);
 
-/*******************************************************************************
+/******************************************************************************
  * API FUNCTIONS
  ***/
 
-/*******************************************************************************
+/******************************************************************************
  * FUNCTION:	    bitree_create
  *
  * DESCRIPTION:	    This function allocates and initializes a binary tree, and
@@ -87,7 +87,7 @@ bitree * bitree_create(void (*destroy)(void *), void * data)
   return tree;
 }
 
-/*******************************************************************************
+/******************************************************************************
  * FUNCTION:	    bitree_destroy
  *
  * DESCRIPTION:	    Removes, if any, all elements from the tree, then frees all
@@ -107,7 +107,7 @@ void bitree_destroy(bitree ** tree)
   bitree_rem(*tree);
 }
 
-/*******************************************************************************
+/******************************************************************************
  * FUNCTION:	    bitree_insl
  *
  * DESCRIPTION:	    This function inserts a new node into the binary tree left
@@ -147,7 +147,7 @@ int bitree_insl(bitree * parent, void * data)
   return 0;
 }
 
-/*******************************************************************************
+/******************************************************************************
  * FUNCTION:	    bitree_insr
  *
  * DESCRIPTION:	    This function inserts a new node to the right of `parent'
@@ -185,7 +185,7 @@ int bitree_insr(bitree * parent, void * data)
   return 0;
 }
 
-/*******************************************************************************
+/******************************************************************************
  * FUNCTION:	    bitree_rem
  *
  * DESCRIPTION:	    This function removes, if any, all children of the node
@@ -220,7 +220,7 @@ void bitree_rem(bitree * node)
   free(node);
 }
 
-/*******************************************************************************
+/******************************************************************************
  * FUNCTION:	    bitree_merge
  *
  * DESCRIPTION:	    Merges two bitrees, without splicing them into each other.
@@ -291,7 +291,7 @@ int bitree_merge(bitree * tree1, bitree * tree2, void * data)
   return 0;
 }
 
-/*******************************************************************************
+/******************************************************************************
  * FUNCTION:	    bitree_npreorder
  *
  * DESCRIPTION:	    This function returns the next node that would be operated
@@ -305,9 +305,9 @@ int bitree_merge(bitree * tree1, bitree * tree2, void * data)
  *		    a problem.
  *
  * NOTES:	    Omega(1), O(log(n))
- *		    THIS IS NOT A TRAVERSAL FUNCTION. It does not 'traverse' the
- *		    tree in a traditional sense. See the documentation in the
- *		    header file.
+ *		    THIS IS NOT A TRAVERSAL FUNCTION. It does not 'traverse'
+ *		    the tree in a traditional sense. See the documentation in
+ *		    the header file.
  ***/
 bitree * bitree_npreorder(bitree * node)
 {
@@ -321,7 +321,7 @@ bitree * bitree_npreorder(bitree * node)
   return npreorder_helper(node->parent, node);
 }
 
-/*******************************************************************************
+/******************************************************************************
  * FUNCTION:	    bitree_npostorder
  *
  * DESCRIPTION:	    This function returns the next node that would be operated
@@ -335,9 +335,9 @@ bitree * bitree_npreorder(bitree * node)
  *		    a problem.
  *
  * NOTES:	    Omega(1), O(log(n))
- *		    THIS IS NOT A TRAVERSAL FUNCTION. It does not 'traverse' the
- *		    tree in a traditional sense. See the documentation in the
- *		    header file.
+ *		    THIS IS NOT A TRAVERSAL FUNCTION. It does not 'traverse'
+ *		    the tree in a traditional sense. See the documentation in
+ *		    the header file.
  *		    Post-Order traversals begin at the leftmost node. The user
  *		    should keep this in mind when using this function.
  ***/
@@ -350,7 +350,7 @@ bitree * bitree_npostorder(bitree * node)
   return npostorder_helper(node->parent, node);
 }
 
-/*******************************************************************************
+/******************************************************************************
  * FUNCTION:	    bitree_ninorder
  *
  * DESCRIPTION:	    This function returns the next node that would be operated
@@ -364,9 +364,9 @@ bitree * bitree_npostorder(bitree * node)
  *		    a problem.
  *
  * NOTES:	    Omega(1), O(log(n))
- *		    THIS IS NOT A TRAVERSAL FUNCTION. It does not 'traverse' the
- *		    tree in a traditional sense. See the documentation in the
- *		    header file.
+ *		    THIS IS NOT A TRAVERSAL FUNCTION. It does not 'traverse'
+ *		    the tree in a traditional sense. See the documentation in
+ *		    the header file.
  *		    In-Order traversals begin at the leftmost node. The user
  *		    should keep this in mind when using this function.
  ***/
@@ -381,7 +381,7 @@ bitree * bitree_ninorder(bitree * node)
   return ninorder_helper(node->parent, node);
 }
 
-/*******************************************************************************
+/******************************************************************************
  * FUNCTION:	    bitree_height
  *
  * DESCRIPTION:	    This function calculates the height of the tree.
@@ -406,7 +406,7 @@ int bitree_height(bitree * tree)
   return right + 1;
 }
 
-/*******************************************************************************
+/******************************************************************************
  * FUNCTION:	    bitree_distance
  *
  * DESCRIPTION:	    Calculate the distance from the root node.
@@ -425,16 +425,16 @@ int bitree_distance(bitree * tree)
   return distance_helper(tree, 0);
 }
 
-/*******************************************************************************
+/******************************************************************************
  * STATIC FUNCTIONS
  ***/
 
-/*******************************************************************************
+/******************************************************************************
  * FUNCTION:	    npreorder_helper
  *
  * DESCRIPTION:	    This is a helper function for bitree_npreorder(). If the
- *		    next node in traversal is not immediately accesible from the
- *		    current node, this function will find it.
+ *		    next node in traversal is not immediately accesible from
+ *		    the current node, this function will find it.
  *
  * ARGUMENTS:	    node: (bitree *) -- on the first call, this pointer usually
  *			contains the value of original->parent.
@@ -462,18 +462,18 @@ static bitree * npreorder_helper(bitree * node, bitree * original)
   return npreorder_helper(node->parent, node);;
 }
 
-/*******************************************************************************
+/******************************************************************************
  * FUNCTION:	    npostorder_helper
  *
  * DESCRIPTION:	    This is a helper function for bitree_npostorder(). If the
- *		    next node in traversal is not immediately accesible from the
- *		    current node, this function will find it.
+ *		    next node in traversal is not immediately accesible from
+ *		    the current node, this function will find it.
  *
  * ARGUMENTS:	    node: (bitree *) -- on the first call, this pointer usually
  *			contains the value of original->parent.
  *		    original: (bitree *) -- pointer to the first node passed.
  *
- * RETURN:	    bitree * -- pointer to the next node in postorder traversal.
+ * RETURN:	    bitree * -- pointer to the next node in postorder traversal
  *
  * NOTES:	    none.
  ***/
@@ -502,12 +502,12 @@ static bitree * npostorder_helper(bitree * node, bitree * original)
   return NULL;
 }
 
-/*******************************************************************************
+/******************************************************************************
  * FUNCTION:	    ninorder_helper
  *
  * DESCRIPTION:	    This is a helper function for bitree_ninorder(). If the
- *		    next node in traversal is not immediately accesible from the
- *		    current node, this function will find it.
+ *		    next node in traversal is not immediately accesible from
+ *		    the current node, this function will find it.
  *
  * ARGUMENTS:	    node: (bitree *) -- on the first call, this pointer usually
  *			contains the value of original->parent.
@@ -545,7 +545,7 @@ static bitree * ninorder_helper(bitree * node, bitree * original)
   return ninorder_helper(node->root->left, node->root);
 }
 
-/*******************************************************************************
+/******************************************************************************
  * FUNCTION:	    update_size
  *
  * DESCRIPTION:	    Called by bitree_merge to recursively update the 'size' and
@@ -570,10 +570,10 @@ static int update_size(bitree * node, int * size, bitree * root)
   return 0;
 }
 
-/*******************************************************************************
+/******************************************************************************
  * FUNCTION:	    distance_helper
  *
- * DESCRIPTION:	    Helper function for bitree_distance--performs the recurstion
+ * DESCRIPTION:	    Helper function for bitree_distance--does the recurstion
  *
  * ARGUMENTS:	    node: (bitree *) -- the current node (during recursion)
  *		    distance: (int) -- the current distance from the root.
@@ -590,4 +590,4 @@ static int distance_helper(bitree * node, int distance)
   return distance_helper(node->parent, ++distance);
 }
 
-/******************************************************************************/
+/*****************************************************************************/
