@@ -7,7 +7,7 @@
  *
  * CREATED:	    11/25/2017
  *
- * LAST EDITED:	    01/01/2018
+ * LAST EDITED:	    01/02/2018
  ***/
 
 /******************************************************************************
@@ -55,6 +55,7 @@ static int test_merge(void);
 static int test_npreorder(void);
 static int test_npostorder(void);
 static int test_ninorder(void);
+static int test_nlevelorder(void);
 static int test_height(void);
 static int test_distance(void);
 
@@ -81,6 +82,7 @@ int main(int argc, char * argv[])
 	  "Test (bitree_npreorder):\t%s\n"
 	  "Test (bitree_npostorder):\t%s\n"
 	  "Test (bitree_ninorder):\t\t%s\n"
+	  "Test (bitree_nlevelorder):\t%s\n"
 	  "Test (bitree_height):\t\t%s\n"
 	  "Test (bitree_distance):\t\t%s\n",
 
@@ -93,6 +95,7 @@ int main(int argc, char * argv[])
 	  test_npreorder()	? FAIL"Fail"NC : PASS"Pass"NC,
 	  test_npostorder()	? FAIL"Fail"NC : PASS"Pass"NC,
 	  test_ninorder()	? FAIL"Fail"NC : PASS"Pass"NC,
+	  test_nlevelorder()	? FAIL"Fail"NC : PASS"Pass"NC,
 	  test_height()		? FAIL"Fail"NC : PASS"Pass"NC,
 	  test_distance()	? FAIL"Fail"NC : PASS"Pass"NC);
 
@@ -130,6 +133,17 @@ int main(int argc, char * argv[])
   i = 0;
   do {
     test_node = bitree_ninorder(test_node);
+    printf("%d: %p\n", i++, test_node);
+  } while (test_node != NULL && test_node != test_tree);
+  bitree_destroy(&test_tree);
+
+  printf("\n"FAIL"Level-Order Test:"NC"\n");
+  test_tree = prep_tree();
+  print_tree(test_tree, 0);
+  printf("\n");
+  test_node = test_tree, i = 0;
+  do {
+    test_node = bitree_nlevelorder(test_node);
     printf("%d: %p\n", i++, test_node);
   } while (test_node != NULL && test_node != test_tree);
   bitree_destroy(&test_tree);
@@ -734,6 +748,59 @@ static int test_ninorder()
 
   /* Next node does not exist */
   if (bitree_ninorder(test) != test->right)
+    return 1;
+
+  bitree_destroy(&test);
+  return 0;
+}
+
+/******************************************************************************
+ * FUNCTION:	    test_nlevelorder
+ *
+ * DESCRIPTION:	    Test the bitree_nlevelorder function.
+ *
+ * ARGUMENTS:	    none.
+ *
+ * RETURN:	    0 if the test passes, 1 if the test fails.
+ *
+ * NOTES:	    none.
+ ***/
+static int test_nlevelorder()
+{
+  /* Test cases:
+   *	NULL
+   *	Tree is empty
+   *	Next node exists
+   *	Next node does not exist
+   */
+
+  bitree * test = NULL;
+
+  /* NULL case */
+  if (bitree_nlevelorder(test) != NULL)
+    return 1;
+
+  int * pTest = NULL;
+  if ((pTest = malloc(sizeof(int))) == NULL)
+    return 1;
+  *pTest = rand() % 20;
+  if ((test = bitree_create(free, pTest)) == NULL)
+    return 1;
+
+  /* Empty case */
+  if (bitree_nlevelorder(test) != test)
+    return 1;
+
+  bitree_destroy(&test);
+  if ((test = prep_tree()) == NULL)
+    return 1;
+
+  /* Next node exists */
+  if (bitree_nlevelorder(test->left) != test->right)
+    return 1;
+
+  /* Next node does not exist */
+  if (bitree_nlevelorder(test->left->right) != test)
     return 1;
 
   bitree_destroy(&test);

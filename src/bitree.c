@@ -11,7 +11,7 @@
  *
  * CREATED:	    11/06/2017
  *
- * LAST EDITED:	    01/01/2018
+ * LAST EDITED:	    01/02/2018
  ***/
 
 /******************************************************************************
@@ -27,13 +27,12 @@
  * STATIC FUNCTION PROTOTYPES
  ***/
 
-/* TODO: Add level-order function.
- */
-
 /* Helper functions used by the 'traverse-type' functions. */
 static bitree * npreorder_helper(bitree * node, bitree * original);
 static bitree * npostorder_helper(bitree * node, bitree * original);
 static bitree * ninorder_helper(bitree * node, bitree * original);
+static bitree * nlevelorder_helper(bitree * node, bitree * old,
+				   int dist, int goal);
 
 /* Used by bitree_merge to update tree parameters */
 static int update_size(bitree * node, int * size, bitree * root);
@@ -382,6 +381,36 @@ bitree * bitree_ninorder(bitree * node)
 }
 
 /******************************************************************************
+ * FUNCTION:	    bitree_nlevelorder
+ *
+ * DESCRIPTION:	    This function returns the next node that would be operated
+ *		    on if the tree were being traversed with a level-order (or
+ *		    breadth-first) traversal. See the documentation for an
+ *		    example of how this function could be used.
+ *
+ * ARGUMENTS:	    node: (bitree *) -- the current node.
+ *
+ * RETURN:	    bitree * -- pointer to the next node, or NULL if there was
+ *		    a problem.
+ *
+ * NOTES:	    Omega(1), O(log(n))
+ *		    THIS IS NOT A TRAVERSAL FUNCTION. It does not 'traverse'
+ *		    the tree in a traditional sense. See the documentation in
+ *		    the header file.
+ ***/
+bitree * bitree_nlevelorder(bitree * node)
+{
+  if (node == NULL)
+    return NULL;
+  if (*(node->size) == 1)
+    return node;
+  if (node == node->root)
+    return node->left;
+  int dist = bitree_distance(node);
+  return nlevelorder_helper(node->parent, node, dist - 1, dist);
+}
+
+/******************************************************************************
  * FUNCTION:	    bitree_height
  *
  * DESCRIPTION:	    This function calculates the height of the tree.
@@ -543,6 +572,47 @@ static bitree * ninorder_helper(bitree * node, bitree * original)
   }
 
   return ninorder_helper(node->root->left, node->root);
+}
+
+/******************************************************************************
+ * FUNCTION:	    nlevelorder_helper
+ *
+ * DESCRIPTION:	    Helper function for bitree_nlevelorder(). This function
+ *		    implements the recursive functionality and extends the
+ *		    interface presented by bitree_nlevelorder(). If the next
+ *		    node is not immediately accessible from the first, this
+ *		    function will find it.
+ *
+ * ARGUMENTS:	    node: (bitree *) -- the current node.
+ *		    old: (bitree *) -- the node we came from.
+ *		    dist: (int) -- the distance of the current node from root.
+ *		    goal: (int) -- the distance of the original node from root.
+ *
+ * RETURN:	    bitree * -- Hopefully, the next node. If there's a problem,
+ *		    return NULL.
+ *
+ * NOTES:	    None.
+ ***/
+static bitree * nlevelorder_helper(bitree * node, bitree * old,
+				   int dist, int goal)
+{
+  if (node == NULL || old == NULL)
+    return NULL; /* Never say never */
+  if (dist == goal)
+    return node;
+
+  if (old == node->left) {
+      return nlevelorder_helper(node->right ? node->right : node->parent,
+				node, node->right ? dist + 1 : dist - 1, goal);
+  } else if (old == node->right) {
+    if (node->root != node)
+      return nlevelorder_helper(node->parent, node, dist - 1, goal);
+    return nlevelorder_helper(node->left, node, dist + 1, goal + 1);
+  } else if (old == node->parent) {
+    bitree * next = node->left ? node->left : node->right;
+    return next ? nlevelorder_helper(next, node, dist + 1, goal) : node->root;
+  }
+  return NULL;
 }
 
 /******************************************************************************
