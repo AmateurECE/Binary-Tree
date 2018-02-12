@@ -7,7 +7,7 @@
 #
 # CREATED:	    11/06/2017
 #
-# LAST EDITED:	    01/01/2018
+# LAST EDITED:	    02/12/2018
 ###
 
 TOP:=$(PWD)
@@ -25,7 +25,7 @@ OBJS=$(patsubst %.c,%.o,$(SRCS))
 
 .PHONY: force test clean
 
-all: force test clean
+all: force test
 
 test: force $(OBJS)
 	$(CC) $(CFLAGS) -o bitree $(OBJS)
@@ -37,7 +37,10 @@ test: force $(OBJS)
 $(OBJS): force
 
 clean:
-	@rm -f $(TOP)/src/test.o
+	rm -f src/*.o
+	rm -f $(PWD)/*.o
+	rm -f bitree
+	rm -rf bitree.dSYM
 
 force:
 
